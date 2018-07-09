@@ -4,7 +4,7 @@ d = 2;              %number of dimensions
 % X = rand(n,d);     
 a = 2;              %user defined const a in objective function
 b = 5;             %user defined const b in objective function
-m = 4;              %fuzzifier
+m = 2;              %fuzzifier
 eta = 2;            %pcm uncertainty parameter for type 1
 epsilon = 10^(-4); %error threshold
 max_iter = 1000;   %max number of iterations before exit
@@ -21,14 +21,15 @@ normalrandom_X = 0;       %For normal random X
 
 
 if random_X
-    X = rand(c,n);
+    X = rand(n,d);
 end
 
 if normalrandom_X
-    X = randn(c,n);
+    X = randn(n,d);
 end
 
 if labelled_dataset
+    [X,Y]=get_data_iris('iris-dataset.txt',',',5);
     
 end
 
@@ -74,6 +75,25 @@ end
 %      set(gca,'Color','k');
 %     hold off
 % end
+
+function p=graph_3d(X,V,U,i_color,point_size,point_shape,filled_color)%i_color as in input color
+    V=(V-min(X))./(max(X)-min(X))  ;  
+    X=(X-min(X))./(max(X)-min(X));
+    color=max((max(U)==U).*linspace(0,1,size(U,1))')'   ;
+    color=[color color color]-[0 rand() rand()];
+    color_2=rand(size(V,1),1);
+    
+    scatter3(X(:,1),X(:,2),X(:,3),200,color,'.');
+     hold on
+     if filled_color
+        scatter3(V(:,1),V(:,2),V(:,3),point_size,point_shape,i_color,"filled");
+     else
+        p= scatter3(V(:,1),V(:,2),V(:,3),point_size,point_shape,i_color);
+     end
+     xlabel("Feature 1",'FontSize' , 16,'FontWeight' , 'bold');
+     ylabel("Feature 2",'FontSize' , 16,'FontWeight' , 'bold');
+     zlabel("Feature 3",'FontSize' , 16,'FontWeight' , 'bold');
+end
 
 function [V U] = get_final_values_fcm(X,c,n,d,m,epsilon,max_iter)
     V_old = rand(c,d);
@@ -159,7 +179,7 @@ function [V U T] = get_final_values_pfcm_intervaltype2(X,c,n,d,m1,m2,eta1,eta2,a
 end
 
 
-function [U_left ,U_right]=get_leftright_fuzzified(U1,U2,m1,m2)%W1_all takes the value for U_L and W2_all takes the values for U_R
+function [U_left ,U_right]=get_leftright_fuzzified(U1,U2,m1,m2) %W1_all takes the value for U_L and W2_all takes the values for U_R
     u1 = U1.^m1;
     u2 = U2.^m2;
     U_right=((u1>=u2).*(u1))+((u2>u1).*(u2));
