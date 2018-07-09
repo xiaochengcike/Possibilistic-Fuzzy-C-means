@@ -1,0 +1,1283 @@
+
+%% bare_jrnl.tex
+%% V1.4b
+%% 2015/08/26
+%% by Michael Shell
+%% see http://www.michaelshell.org/
+%% for current contact information.
+%%
+%% This is a skeleton file demonstrating the use of IEEEtran.cls
+%% (requires IEEEtran.cls version 1.8b or later) with an IEEE
+%% journal paper.
+%%
+%% Support sites:
+%% http://www.michaelshell.org/tex/ieeetran/
+%% http://www.ctan.org/pkg/ieeetran
+%% and
+%% http://www.ieee.org/
+
+%%*************************************************************************
+%% Legal Notice:
+%% This code is offered as-is without any warranty either expressed or
+%% implied; without even the implied warranty of MERCHANTABILITY or
+%% FITNESS FOR A PARTICULAR PURPOSE! 
+%% User assumes all risk.
+%% In no event shall the IEEE or any contributor to this code be liable for
+%% any damages or losses, including, but not limited to, incidental,
+%% consequential, or any other damages, resulting from the use or misuse
+%% of any information contained here.
+%%
+%% All comments are the opinions of their respective authors and are not
+%% necessarily endorsed by the IEEE.
+%%
+%% This work is distributed under the LaTeX Project Public License (LPPL)
+%% ( http://www.latex-project.org/ ) version 1.3, and may be freely used,
+%% distributed and modified. A copy of the LPPL, version 1.3, is included
+%% in the base LaTeX documentation of all distributions of LaTeX released
+%% 2003/12/01 or later.
+%% Retain all contribution notices and credits.
+%% ** Modified files should be clearly indicated as such, including  **
+%% ** renaming them and changing author support contact information. **
+%%*************************************************************************
+
+
+% *** Authors should verify (and, if needed, correct) their LaTeX system  ***
+% *** with the testflow diagnostic prior to trusting their LaTeX platform ***
+% *** with production work. The IEEE's font choices and paper sizes can   ***
+% *** trigger bugs that do not appear when using other class files.       ***                          ***
+% The testflow support page is at:
+% http://www.michaelshell.org/tex/testflow/
+
+
+
+\documentclass[journal, onecolumn]{IEEEtran}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows}
+%\usepackage{subcaption}
+%\usepackage{tikz}
+%\usetikzlibrary{shapes.geometric, arrows}
+%
+% If IEEEtran.cls has not been installed into the LaTeX system files,
+% manually specify the path to it like:
+% \documentclass[journal]{../sty/IEEEtran}
+
+
+
+
+
+% Some very useful LaTeX packages include:
+% (uncomment the ones you want to load)
+
+
+% *** MISC UTILITY PACKAGES ***
+%
+%\usepackage{ifpdf}
+% Heiko Oberdiek's ifpdf.sty is very useful if you need conditional
+% compilation based on whether the output is pdf or dvi.
+% usage:
+% \ifpdf
+%   % pdf code
+% \else
+%   % dvi code
+% \fi
+% The latest version of ifpdf.sty can be obtained from:
+% http://www.ctan.org/pkg/ifpdf
+% Also, note that IEEEtran.cls V1.7 and later provides a builtin
+% \ifCLASSINFOpdf conditional that works the same way.
+% When switching from latex to pdflatex and vice-versa, the compiler may
+% have to be run twice to clear warning/error messages.
+
+
+
+
+
+
+% *** CITATION PACKAGES ***
+%
+%\usepackage{cite}
+% cite.sty was written by Donald Arseneau
+% V1.6 and later of IEEEtran pre-defines the format of the cite.sty package
+% \cite{} output to follow that of the IEEE. Loading the cite package will
+% result in citation numbers being automatically sorted and properly
+% "compressed/ranged". e.g., [1], [9], [2], [7], [5], [6] without using
+% cite.sty will become [1], [2], [5]--[7], [9] using cite.sty. cite.sty's
+% \cite will automatically add leading space, if needed. Use cite.sty's
+% noadjust option (cite.sty V3.8 and later) if you want to turn this off
+% such as if a citation ever needs to be enclosed in parenthesis.
+% cite.sty is already installed on most LaTeX systems. Be sure and use
+% version 5.0 (2009-03-20) and later if using hyperref.sty.
+% The latest version can be obtained at:
+% http://www.ctan.org/pkg/cite
+% The documentation is contained in the cite.sty file itself.
+
+
+
+
+
+
+% *** GRAPHICS RELATED PACKAGES ***
+%
+\ifCLASSINFOpdf
+  % \usepackage[pdftex]{graphicx}
+  % declare the path(s) where your graphic files are
+  % \graphicspath{{../pdf/}{../jpeg/}}
+  % and their extensions so you won't have to specify these with
+  % every instance of \includegraphics
+  % \DeclareGraphicsExtensions{.pdf,.jpeg,.png}
+\else
+  % or other class option (dvipsone, dvipdf, if not using dvips). graphicx
+  % will default to the driver specified in the system graphics.cfg if no
+  % driver is specified.
+  % \usepackage[dvips]{graphicx}
+  % declare the path(s) where your graphic files are
+  % \graphicspath{{../eps/}}
+  % and their extensions so you won't have to specify these with
+  % every instance of \includegraphics
+  % \DeclareGraphicsExtensions{.eps}
+\fi
+% graphicx was written by David Carlisle and Sebastian Rahtz. It is
+% required if you want graphics, photos, etc. graphicx.sty is already
+% installed on most LaTeX systems. The latest version and documentation
+% can be obtained at: 
+% http://www.ctan.org/pkg/graphicx
+% Another good source of documentation is "Using Imported Graphics in
+% LaTeX2e" by Keith Reckdahl which can be found at:
+% http://www.ctan.org/pkg/epslatex
+%
+% latex, and pdflatex in dvi mode, support graphics in encapsulated
+% postscript (.eps) format. pdflatex in pdf mode supports graphics
+% in .pdf, .jpeg, .png and .mps (metapost) formats. Users should ensure
+% that all non-photo figures use a vector format (.eps, .pdf, .mps) and
+% not a bitmapped formats (.jpeg, .png). The IEEE frowns on bitmapped formats
+% which can result in "jaggedy"/blurry rendering of lines and letters as
+% well as large increases in file sizes.
+%
+% You can find documentation about the pdfTeX application at:
+% http://www.tug.org/applications/pdftex
+
+
+
+
+
+% *** MATH PACKAGES ***
+%
+%\usepackage{amsmath}
+% A popular package from the American Mathematical Society that provides
+% many useful and powerful commands for dealing with mathematics.
+%
+% Note that the amsmath package sets \interdisplaylinepenalty to 10000
+% thus preventing page breaks from occurring within multiline equations. Use:
+%\interdisplaylinepenalty=2500
+% after loading amsmath to restore such page breaks as IEEEtran.cls normally
+% does. amsmath.sty is already installed on most LaTeX systems. The latest
+% version and documentation can be obtained at:
+% http://www.ctan.org/pkg/amsmath
+
+
+
+
+
+% *** SPECIALIZED LIST PACKAGES ***
+%
+%\usepackage{algorithmic}
+% algorithmic.sty was written by Peter Williams and Rogerio Brito.
+% This package provides an algorithmic environment fo describing algorithms.
+% You can use the algorithmic environment in-text or within a figure
+% environment to provide for a floating algorithm. Do NOT use the algorithm
+% floating environment provided by algorithm.sty (by the same authors) or
+% algorithm2e.sty (by Christophe Fiorio) as the IEEE does not use dedicated
+% algorithm float types and packages that provide these will not provide
+% correct IEEE style captions. The latest version and documentation of
+% algorithmic.sty can be obtained at:
+% http://www.ctan.org/pkg/algorithms
+% Also of interest may be the (relatively newer and more customizable)
+% algorithmicx.sty package by Szasz Janos:
+% http://www.ctan.org/pkg/algorithmicx
+
+
+
+
+% *** ALIGNMENT PACKAGES ***
+%
+%\usepackage{array}
+% Frank Mittelbach's and David Carlisle's array.sty patches and improves
+% the standard LaTeX2e array and tabular environments to provide better
+% appearance and additional user controls. As the default LaTeX2e table
+% generation code is lacking to the point of almost being broken with
+% respect to the quality of the end results, all users are strongly
+% advised to use an enhanced (at the very least that provided by array.sty)
+% set of table tools. array.sty is already installed on most systems. The
+% latest version and documentation can be obtained at:
+% http://www.ctan.org/pkg/array
+
+
+% IEEEtran contains the IEEEeqnarray family of commands that can be used to
+% generate multiline equations as well as matrices, tables, etc., of high
+% quality.
+
+
+
+
+% *** SUBFIGURE PACKAGES ***
+%\ifCLASSOPTIONcompsoc
+%  \usepackage[caption=false,font=normalsize,labelfont=sf,textfont=sf]{subfig}
+%\else
+%  \usepackage[caption=false,font=footnotesize]{subfig}
+%\fi
+% subfig.sty, written by Steven Douglas Cochran, is the modern replacement
+% for subfigure.sty, the latter of which is no longer maintained and is
+% incompatible with some LaTeX packages including fixltx2e. However,
+% subfig.sty requires and automatically loads Axel Sommerfeldt's caption.sty
+% which will override IEEEtran.cls' handling of captions and this will result
+% in non-IEEE style figure/table captions. To prevent this problem, be sure
+% and invoke subfig.sty's "caption=false" package option (available since
+% subfig.sty version 1.3, 2005/06/28) as this is will preserve IEEEtran.cls
+% handling of captions.
+% Note that the Computer Society format requires a larger sans serif font
+% than the serif footnote size font used in traditional IEEE formatting
+% and thus the need to invoke different subfig.sty package options depending
+% on whether compsoc mode has been enabled.
+%
+% The latest version and documentation of subfig.sty can be obtained at:
+% http://www.ctan.org/pkg/subfig
+
+
+
+
+% *** FLOAT PACKAGES ***
+%
+%\usepackage{fixltx2e}
+% fixltx2e, the successor to the earlier fix2col.sty, was written by
+% Frank Mittelbach and David Carlisle. This package corrects a few problems
+% in the LaTeX2e kernel, the most notable of which is that in current
+% LaTeX2e releases, the ordering of single and double column floats is not
+% guaranteed to be preserved. Thus, an unpatched LaTeX2e can allow a
+% single column figure to be placed prior to an earlier double column
+% figure.
+% Be aware that LaTeX2e kernels dated 2015 and later have fixltx2e.sty's
+% corrections already built into the system in which case a warning will
+% be issued if an attempt is made to load fixltx2e.sty as it is no longer
+% needed.
+% The latest version and documentation can be found at:
+% http://www.ctan.org/pkg/fixltx2e
+
+
+%\usepackage{stfloats}
+% stfloats.sty was written by Sigitas Tolusis. This package gives LaTeX2e
+% the ability to do double column floats at the bottom of the page as well
+% as the top. (e.g., "\begin{figure*}[!b]" is not normally possible in
+% LaTeX2e). It also provides a command:
+%\fnbelowfloat
+% to enable the placement of footnotes below bottom floats (the standard
+% LaTeX2e kernel puts them above bottom floats). This is an invasive package
+% which rewrites many portions of the LaTeX2e float routines. It may not work
+% with other packages that modify the LaTeX2e float routines. The latest
+% version and documentation can be obtained at:
+% http://www.ctan.org/pkg/stfloats
+% Do not use the stfloats baselinefloat ability as the IEEE does not allow
+% \baselineskip to stretch. Authors submitting work to the IEEE should note
+% that the IEEE rarely uses double column equations and that authors should try
+% to avoid such use. Do not be tempted to use the cuted.sty or midfloat.sty
+% packages (also by Sigitas Tolusis) as the IEEE does not format its papers in
+% such ways.
+% Do not attempt to use stfloats with fixltx2e as they are incompatible.
+% Instead, use Morten Hogholm'a dblfloatfix which combines the features
+% of both fixltx2e and stfloats:
+%
+% \usepackage{dblfloatfix}
+% The latest version can be found at:
+% http://www.ctan.org/pkg/dblfloatfix
+
+
+
+
+%\ifCLASSOPTIONcaptionsoff
+%  \usepackage[nomarkers]{endfloat}
+% \let\MYoriglatexcaption\caption
+% \renewcommand{\caption}[2][\relax]{\MYoriglatexcaption[#2]{#2}}
+%\fi
+% endfloat.sty was written by James Darrell McCauley, Jeff Goldberg and 
+% Axel Sommerfeldt. This package may be useful when used in conjunction with 
+% IEEEtran.cls'  captionsoff option. Some IEEE journals/societies require that
+% submissions have lists of figures/tables at the end of the paper and that
+% figures/tables without any captions are placed on a page by themselves at
+% the end of the document. If needed, the draftcls IEEEtran class option or
+% \CLASSINPUTbaselinestretch interface can be used to increase the line
+% spacing as well. Be sure and use the nomarkers option of endfloat to
+% prevent endfloat from "marking" where the figures would have been placed
+% in the text. The two hack lines of code above are a slight modification of
+% that suggested by in the endfloat docs (section 8.4.1) to ensure that
+% the full captions always appear in the list of figures/tables - even if
+% the user used the short optional argument of \caption[]{}.
+% IEEE papers do not typically make use of \caption[]'s optional argument,
+% so this should not be an issue. A similar trick can be used to disable
+% captions of packages such as subfig.sty that lack options to turn off
+% the subcaptions:
+% For subfig.sty:
+% \let\MYorigsubfloat\subfloat
+% \renewcommand{\subfloat}[2][\relax]{\MYorigsubfloat[]{#2}}
+% However, the above trick will not work if both optional arguments of
+% the \subfloat command are used. Furthermore, there needs to be a
+% description of each subfigure *somewhere* and endfloat does not add
+% subfigure captions to its list of figures. Thus, the best approach is to
+% avoid the use of subfigure captions (many IEEE journals avoid them anyway)
+% and instead reference/explain all the subfigures within the main caption.
+% The latest version of endfloat.sty and its documentation can obtained at:
+% http://www.ctan.org/pkg/endfloat
+%
+% The IEEEtran \ifCLASSOPTIONcaptionsoff conditional can also be used
+% later in the document, say, to conditionally put the References on a 
+% page by themselves.
+
+
+
+
+% *** PDF, URL AND HYPERLINK PACKAGES ***
+%
+%\usepackage{url}
+% url.sty was written by Donald Arseneau. It provides better support for
+% handling and breaking URLs. url.sty is already installed on most LaTeX
+% systems. The latest version and documentation can be obtained at:
+% http://www.ctan.org/pkg/url
+% Basically, \url{my_url_here}.
+
+
+
+
+% *** Do not adjust lengths that control margins, column widths, etc. ***
+% *** Do not use packages that alter fonts (such as pslatex).         ***
+% There should be no need to do such things with IEEEtran.cls V1.6 and later.
+% (Unless specifically asked to do so by the journal or conference you plan
+% to submit to, of course. )
+
+
+% correct bad hyphenation here
+\hyphenation{op-tical net-works semi-conduc-tor}
+
+
+\begin{document}
+%
+% paper title
+% Titles are generally capitalized except for words such as a, an, and, as,
+% at, but, by, for, in, nor, of, on, or, the, to and up, which are usually
+% not capitalized unless they are the first or last word of the title.
+% Linebreaks \\ can be used within to get better formatting as desired.
+% Do not put math or special symbols in the title.
+\title{Interval Type-2 and General Type-2 Possibilistic Fuzzy-C-Means}
+%
+%
+% author names and IEEE memberships
+% note positions of commas and nonbreaking spaces ( ~ ) LaTeX will not break
+% a structure at a ~ so this keeps an author's name from being broken across
+% two lines.
+% use \thanks{} to gain access to the first footnote area
+% a separate \thanks must be used for each paragraph as LaTeX2e's \thanks
+% was not built to handle multiple paragraphs
+%
+
+\author{Michael~Shell,~\IEEEmembership{Member,~IEEE,}
+        John~Doe,~\IEEEmembership{Fellow,~OSA,}
+        and~Jane~Doe,~\IEEEmembership{Life~Fellow,~IEEE}% <-this % stops a space
+\thanks{M. Shell was with the Department
+of Electrical and Computer Engineering, Georgia Institute of Technology, Atlanta,
+GA, 30332 USA e-mail: (see http://www.michaelshell.org/contact.html).}% <-this % stops a space
+\thanks{J. Doe and J. Doe are with Anonymous University.}% <-this % stops a space
+\thanks{Manuscript received April 19, 2005; revised August 26, 2015.}}
+
+% note the % following the last \IEEEmembership and also \thanks - 
+% these prevent an unwanted space from occurring between the last author name
+% and the end of the author line. i.e., if you had this:
+% 
+% \author{....lastname \thanks{...} \thanks{...} }
+%                     ^------------^------------^----Do not want these spaces!
+%
+% a space would be appended to the last name and could cause every name on that
+% line to be shifted left slightly. This is one of those "LaTeX things". For
+% instance, "\textbf{A} \textbf{B}" will typeset as "A B" not "AB". To get
+% "AB" then you have to do: "\textbf{A}\textbf{B}"
+% \thanks is no different in this regard, so shield the last } of each \thanks
+% that ends a line with a % and do not let a space in before the next \thanks.
+% Spaces after \IEEEmembership other than the last one are OK (and needed) as
+% you are supposed to have spaces between the names. For what it is worth,
+% this is a minor point as most people would not even notice if the said evil
+% space somehow managed to creep in.
+
+
+
+% The paper headers
+\markboth{Journal of \LaTeX\ Class Files,~Vol.~14, No.~8, August~2015}%
+{Shell \MakeLowercase{\textit{et al.}}: Bare Demo of IEEEtran.cls for IEEE Journals}
+% The only time the second header will appear is for the odd numbered pages
+% after the title page when using the twoside option.
+% 
+% *** Note that you probably will NOT want to include the author's ***
+% *** name in the headers of peer review papers.                   ***
+% You can use \ifCLASSOPTIONpeerreview for conditional compilation here if
+% you desire.
+
+
+
+
+% If you want to put a publisher's ID mark on the page you can do it like
+% this:
+%\IEEEpubid{0000--0000/00\$00.00~\copyright~2015 IEEE}
+% Remember, if you use this you must call \IEEEpubidadjcol in the second
+% column for its text to clear the IEEEpubid mark.
+
+
+
+% use for special paper notices
+%\IEEEspecialpapernotice{(Invited Paper)}
+
+
+
+
+% make the title area
+\maketitle
+
+% As a general rule, do not put math, special symbols or citations
+% in the abstract or keywords.
+\begin{abstract}
+In 2005, possibilistic fuzzy-c-means (PFCM) was introduced to solve problems of unsupervised clustering by eliminating the drawbacks of previously established algorithms of fuzzy-c-means (FCM), possibilistic-c-means (PCM) and fuzzy-possibilistic-c-means (FPCM). PFCM model, a hybridization of FCM and PCM, produces both membership values and possibility values simultaneously in addition to the cluster prototypes for each cluster. The PFCM model uses a fuzzifier denoted by $m$ and a bandwidth parameter denoted by $\eta$ which is used to evaluate the memberships and possibilities for fuzzy sets. However, when we consider fuzzy sets and assign fuzzy memberships and possibilities to a pattern set, there arises a question of uncertainty in the various parameters of Type-1 PFCM (T1-PFCM). In this paper, we extrapolate PFCM to interval type 2 fuzzy sets (IT2-PFCM) and general type-2 fuzzy sets(GT2-PFCM) by accounting for the uncertainty in the fuzzifier $m$  and bandwidth parameter, $\eta$ by incorporating an interval of the possible fuzzifier $m$ lying between $m_1$  and $m_2$ and an interval of the possible bandwidth parameter $\eta$ lying between $\eta_1$ and $\eta_2$, which creates a footprint of uncertainty(FOU) for $m$ and $\eta$. The extra degree of freedom in type-2 fuzzy sets makes type-2 PFCM outperform type-1 PFCM. Type-reduction and defuzzification is then performed to result into the final desired clusters. Several numerical examples are given to show the validity of T2-PFCM by comparing the results with those of FCM, PCM, FPCM and T1-PFCM. 
+\end{abstract}
+
+% Note that keywords are not normally used for peerreview papers.
+\begin{IEEEkeywords}
+Possibilistic fuzzy-c-means(PFCM), interval type-2 PFCM, general type-2 PFCM, typicality values
+\end{IEEEkeywords}
+
+
+
+
+
+
+% For peer review papers, you can put extra information on the cover
+% page as needed:
+% \ifCLASSOPTIONpeerreview
+% \begin{center} \bfseries EDICS Category: 3-BBND \end{center}
+% \fi
+%
+% For peerreview papers, this IEEEtran command inserts a page break and
+% creates the second title. It will be ignored for other modes.
+\IEEEpeerreviewmaketitle
+
+
+
+\section{Introduction}
+% The very first letter is a 2 line initial drop letter followed
+% by the rest of the first word in caps.
+% 
+% form to use if the first word consists of a single letter:
+% \IEEEPARstart{A}{demo} file is ....
+% 
+% form to use if you need the single drop letter followed by
+% normal text (unknown if ever used by the IEEE):
+% \IEEEPARstart{A}{}demo file is ....
+% 
+% Some journals put the first two words in caps:
+% \IEEEPARstart{T}{his demo} file is ....
+% 
+% Here we have the typical use of a "T" for an initial drop letter
+% and "HIS" in caps to complete the first word.
+Clustering is the process of grouping similar entities together while taking into consideration some predefined features or attributes. In machine learning, one of the clustering techniques used is unsupervised learning, where, inferences are drawn from datasets consisting of input data without labelled responses. While classical sets have crisp boundaries, in this paper, we deal with fuzzy sets, as first proposed by Zadeh in 1965 in [3] that account for even the inaccurate and ambiguous notions [1], and hence comes the concept of membership values. The membership values denote the degree with which an element $x$ from the universe of discourse belongs to a particular set, where the membership value varies from 0 (not belonging to the set) to 1 (complete membership in the set).  In other words, clustering can be thought of as two types, hard clustering and soft clustering. In hard clustering, the data points are divided into distinct sets, that is, a single data point can belong to only one cluster, whereas in soft clustering, data points have a fuzzy membership in a cluster, that is, a particular data point can belong to more than one cluster with different membership value [2]. While traditional hard clustering works for physical systems, fuzzy clustering is preferred for realistic human-centered systems.
+
+
+Various algorithms have been previously introduced to solve unsupervised clustering problems for fuzzy sets. For our proposed algorithms, we discuss a few of these algorithms, namely, FCM, PCM and PFCM.  FCM is the mostly widely used fuzzy clustering algorithm. FCM uses the concept of a fuzzifier m which is used to determine the membership value of a pattern $x_k$ belonging to a particular cluster with cluster prototype, here the cluster center, $v_i$ where $k$=1,2…n and $i$=1,2,…c , where n is the number of patterns and c is the number of clusters. FCM requires the knowledge of the initial number of desired clusters and the membership value is decided by the relative distance between the pattern $x_k$)  and the cluster center $v_i$ . FCM finds its applications in classification of remote-sensing images[4], MRI image segmentation[5], tax administration[6], meteorological data[7] and tumor segmentation[8]. However, one of the major drawbacks of using FCM is its noise sensitivity and constrained memberships and hence Possibilistic-C-Means (PCM) was introduced by Barni et al. in 1996. 
+
+
+PCM uses a parameter given by $\eta$ whose value is estimated from the dataset itself. PCM applies the possibilistic approach which simply means that the membership value of a point in a class represents the typicality of the point in the class, or the possibility of the pattern $x_k$ belonging to the class with cluster prototype $v_i$ where $k$=1,2…n and $i$=1,2,…c. Since, the noise points are comparatively less typical, while using typicality in PCM algorithm, the noise sensitivity is considerably reduced. PCM finds its applications in smartphones implementation [9], radar targets position acquisition [10], clustering incomplete multimedia data [11] and big data clustering [12]. However, in PCM, clustering results are strongly dependent on parameter selection and initialization and the clustering accuracy is affected due to the problem of coincident clustering [13]. To eliminate these drawbacks, fuzzy possibilistic-c-means clustering algorithm(FPCM) was introduced. FPCM generated both the memberships and possibilities simultaneously and solved the problem of noise sensitivity as seen in FCM and the coincident clusters as experienced in PCM[14]. 
+
+
+However, in 2005, another algorithm, possibilistic fuzzy c means (PFCM) was introduced by Pal et al. which further solved the constraints of typicality values as seen in FPCM [15]. PFCM hybridizes FCM and PCM,  where, the constraint on typicality values (or the constraint of row-sum=1) is relaxed but the column constraints on membership values is retained. PFCM uses the fuzzifier that is denoted by m, which determines the membership values, and the bandwidth parameter $\eta$ that is used  to evaluate the typicality values. PFCM further uses constants a and b that define the relative importance of fuzzy membership and typicality values in the objective function. Since PFCM utilizes more number of parameters to decide on the optimal solution for clustering, it provides an increased degree of freedom and hence renders better results as compared to the ones stated above. However, when we consider fuzzy sets and different parameters in a particular algorithm, we come across the possibility of the fuzziness of these parameters. 
+In this paper, we account for the fuzziness in the possible value of the fuzzifier $m$ and the bandwidth parameter $\eta$ and generate a FOU for both by taking an interval of fuzziness for $m$, that is, considering the possibility of m lying in the interval $m_1$ and $m_2$, and an interval of fuzziness for $\eta$ lying in the interval $\eta_1$ and $\eta_2$. This concept basically extrapolates the PFCM algorithm to type-2 fuzzy sets since it accounts for an extra degree of fuzziness called the secondary grade distribution of the fuzzifier $m_1$ and the parameter $\eta$. This type-2 PFCM (T1-PFCM) can either be taken as Interval type-2 PFCM (IT2-PFCM) or General type-2 PFCM (GT2-PFCM) depending on the distribution of secondary grade function in the interval between $m_1$ and $m_2$ and $\eta_1$ and $\eta_2$. If this secondary grade distribution is uniform over the interval, it is considered as IT2-PFCM and if the distribution is non-uniform then it is considered to be GT2-PFCM. 
+The rest of the paper is organized as follows. Section II discusses Type 2 FCM, Type 2 PCM and T1-PFCM. In Section III we present the new IT2-PFCM and GT2-PFCM model. Section IV includes some the experimental examples that compare FCM, PCM,PFCM with our proposed IT2-PFCM and GT2-PFCM. Section V contains the conclusions.
+
+% You must have at least 2 lines in the paragraph with the drop letter
+% (should never be an issue)
+
+
+\section{Background}
+\subsection{Type-1 Possibilistic Fuzzy-C-Means}
+
+
+As mentioned above, one of the most widely used algorithms for unsupervised clustering is FCM. However, FCM uses the concept of membership values of the pattern $x_k$ belonging to the cluster with cluster prototype given by $v_i$, where $k$=1,2…n and $i$=1,2…c, with n being the number of data points and c is the number of desired clusters. The membership values depend on the fuzzifier given by $m$ and the relative distance between the pattern and cluster center. Thus for a point $x_j$ lying at equal distances from say, 2 cluster centers, the membership value of the pattern belonging to each of these clusters is 0.5, irrespective of its actual distance from the centroids. This leads to the problem of noise sensitivity, because in case of the distance being large, it actually should have close to zero membership in either of the clusters. To solve this problem of noise sensitivity, another variation of FCM was introduced in which the focus was shifted from the membership values to the typicality values, and this algorithm is called PCM. PCM, however, shows dependency on initialization and can sometimes generate coincident clusters.  In 2005, Pal et al. came up with the PFCM algorithm for type-1 fuzzy sets which overcomes the above drawbacks and is a hybridization of FCM and PCM [15]. In PFCM, the constraint (row-sum=1) was relaxed on typicality values but retain the column constraint on membership values. 
+
+In, PFCM, the following optimization equation is used: 
+
+
+\begin{equation}
+\min_{(U,T,V)} {J_{m,\eta}(U,T,V; X)=\sum_{k=1}^n \sum_{i=1}^c(au_{ik} ^m+ bt_{ik}^\eta)\times {\Vert x_k-v_i \Vert}_A^2+ \sum_{i=1}^c \gamma_i \sum_{k=1}^n(1-t_{ik})^\eta  }
+\end{equation}
+
+Subject to the constraints: 
+\begin{equation}
+\sum_{i=1}^c u_{ik} = 1  \forall  k=1,2...n 
+\end{equation}
+
+  and,
+  
+\begin{equation}
+0\leq u_{ik}, t_{ik}\leq 1
+\end{equation}
+
+
+Here, $a>0$,$b>0$, $m>1$ and $\eta>1$. In (1), $\gamma_i>0$ is a user-defined constant. The constants $a$ and $b$ define the relative importance of fuzzy membership and typicality values in the objective function. 
+
+In (1), the membership matrix $U$ of the order $c\times n$, with the elements $u_{ik}$  is given by the equation:
+
+\begin{equation}
+u_{ik}=(\sum_{j=1}^c (D_{ikA}/D_{jkA})^{2/(m-1)})^{-1}  
+\end{equation}
+
+where, 
+$1 \leq k \leq n; 1 \leq i \leq c$
+
+In (4), 
+
+\begin{equation}
+D_{ikA}= {\Vert x_k - v_i \Vert }_A >0  \:\:\:\:\:\: \forall i;\:\: k,m,\eta >1
+\end{equation}
+
+and, 
+
+\begin{equation}
+{\Vert x \Vert}_A = \sqrt{x^t A x}
+\end{equation}
+
+Similarly, the typicality matrix, $T$ of the order $ c\times n$  with elements given by $t_{ik}$:
+
+\begin{equation}
+t_{ik} = (1+ (b \frac{D_{ikA}^2}{\gamma_i})^{1/(\eta -1)})^{-1} \;\:\: 1 \leq i \leq c; \: 1 \leq k \leq n
+\end{equation}
+
+where, 
+\begin{equation}
+\gamma_i= K \frac{\sum_{k=1}^n u_{ik} d_{ik}^2}{\sum_{k=1}^n u_{ik}}
+\end{equation}
+
+
+The set of cluster centroids denoted in (1) by V consists of elements given by $v_i$ : 
+
+\begin{equation}
+v_i = \frac{\sum_{k=1}^n (au_{ik}^m + bt_{ik}^\eta)x_k}{\sum_{k=1}^n (au_{ik}^m + bt_{ik}^\eta)}
+\end{equation}
+
+Fuzzy sets were introduced to cater to the uncertainties as seen in real-life applications as opposed to the application of the classical notion of sets for physical systems. In type-1 PFCM, we use the membership and typicality values which arise from the concept of fuzziness as opposed to the classical sets, where the membership can take values either 0 or 1. The membership values are computed using the degree of fuzziness, or the fuzzifier, $m$ and similarly, typicality values are calculated using the parameter $\ eta$. 
+
+When we discuss about the fuzziness, we must also account for the fuzziness in the values of the fuzzifier $m$ and the parameter $\eta$. This fuzziness leads us to extrapolate the Type-1 PFCM to Interval Type-2 PFCM and General Type-2 PFCM. 
+
+\section{Proposed Algorithm}
+
+
+In case of type-2 fuzzy sets, we consider a fuzziness in the values of the fuzzifier $m$ and the parameter $\eta$. This uncertainty in the fuzzifer and the parameter leads to an uncertainty in membership values and typicalities which further result in the formation of a footprint of uncertainty (FOU) of the membership function and typicality. The footprint of uncertainty (FOU) of a type-2 fuzzy set is a region with boundaries covering all the primary membership or typicality points of elements $x$. The more (less) area in the FOU the more (less) is the uncertainty. It is desirable to reduce the footprint of uncertainty without comprising on the information contained in it to make classification more accurate.The FOU of membership function gives the upper membership function(UMF) and the lower membership function(LMF) and the FOU of typicality gives the upper typicality(UT) and the lower typicality(LT), denoted by, $\overline{u_x}$ , $\underline{u_x}$ , $\overline{t_x}$, $\underline{t_x}$ respectively.
+
+We compute an interval for the possible membership function denoted by $J_x$, and the possible typicality values $K_x$, using (10) and (11). 
+
+
+The type-2 fuzzy sets are given by the equation: 
+\begin{equation}
+\tilde{A}= {\{ ((x,u),\mu_{\tilde{A}}(x,u))\: | \: \forall x \in X, \forall u \in J_x \subseteq [\: 0,1 \:]  \}}
+\end{equation}
+
+
+
+\begin{equation}
+J_x=[\: \underline{u_x},\overline{u_x} \:]
+\end{equation}
+
+\begin{equation}
+K_x=[\: \underline{t_x},\overline{t_x} \:]
+\end{equation}
+
+
+In interval type-2 fuzzy sets, the interval $J_x$ has a uniform distribution, that is, the secondary grade function, determining the distribution of the membership value in the interval $J_x$ , is equal to one throughout the interval. In General type-2, however, this secondary grade function is not necessarily one and hence general type-2 provides one more degree of freedom over Interval Type-2, thus allowing the possibility of general type-2 PFCM outperforming interval type-2  PFCM.
+
+
+In this paper, we propose two algorithms, Interval Type-2 PFCM and General Type-2 PFCM.
+
+
+\subsection{Interval Type-2 Possibilistic Fuzzy-C-Means}
+
+Extending an algorithm to type-2 increases the computational complexity by a considerable factor. However, taking the secondary grade function to be uniformly equal to one in the interval given by $J_x$ reduces the complexity and provides an improvement over the algorithm applied to type-1 fuzzy sets. 
+We represent interval type-2 fuzzy sets by the following equation: 
+
+
+\begin{equation}
+\tilde{A}= {\{ ((x,u),\mu_{\tilde{A}}(x,u))\: | \: \forall x \in X, \forall u \in J_x \subseteq [\: 0,1 \:], \: \mu_{\tilde{A}}(x,u))=1 \}}
+\end{equation}
+
+Uncertainty in the primary memberships of a type-2 fuzzy set, $\tilde{A}$, consists of a bounded region that we call the footprint of uncertainty (FOU). It is the union of all primary memberships, i.e.
+\begin{equation}
+FOU(\tilde{A})= \bigcup_{x \in X} J_x
+\end{equation}
+The shaded region in Fig.  1  is the FOU for membership function and Fig.  2 is the secondary grade membership function for interval type-2.
+
+\begin{figure}[htb]
+\begin{minipage}{0.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{it2fou}
+  \caption{IT2 footprint of uncertainty}
+  %\label{fig:sfig1}
+\end{minipage}%
+\begin{minipage}{0.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{it2sg}
+  \caption{IT2 secondary membership function}
+  %\label{fig:sfig1}
+\end{minipage}%
+\end{figure}
+
+In interval type-2 PFCM (IT2-PFCM) we consider an interval for both the fuzzifier $m$ and the parameter $\eta$ and hence, for the membership and typicality values. We thus have a FOU for both. To account for the fuzziness in $m$, we consider a range for the possible values of $m$ as [$m_1$, $m_2$], and to account for the fuzziness in $\eta$, we consider a range for the possible values of $\eta$ as [$\eta_1$ ,$\eta_2$].
+
+For $i$=1,2...c and $k$= 1,2...n, the FOU of membership function gives the upper membership function(UMF) and the lower membership function(LMF) which is computed using: 
+
+
+
+
+\begin{equation}
+ \overline{u_{ik}} =
+  \begin{cases}
+               \frac{1}{\sum_{j=1}^c (\frac{d_{ik}}{d_{jk}})^{\frac{2}{(m_1-1)}}}                     & if \:\: \frac{1}{\sum_{j=1}^c (\frac{d_{ik}}{d_{jk}})} < \frac{1}{c} \\
+ \frac{1}{\sum_{j=1}^c (\frac{d_{ik}}{d_{jk}})^{\frac{2}{(m_2-1)}}} &\:\:\:otherwise \\
+ 
+  \end{cases}
+\end{equation}
+
+\begin{equation}
+ \underline{u_{ik}} =
+  \begin{cases}
+               \frac{1}{\sum_{j=1}^c (\frac{d_{ik}}{d_{jk}})^{\frac{2}{(m_1-1)}}}                     & if \:\: \frac{1}{\sum_{j=1}^c (\frac{d_{ik}}{d_{jk}})} \geq \frac{1}{c} \\
+ \frac{1}{\sum_{j=1}^c (\frac{d_{ik}}{d_{jk}})^{\frac{2}{(m_2-1)}}} &\:\:\:otherwise \\
+ 
+  \end{cases}
+\end{equation}
+
+where, 
+
+\begin{equation}
+d_{ik}=\Vert x_k - v_i \Vert
+\end{equation}
+
+
+The FOU of the typicality gives the upper typicality(UT) and the lower typicality(LT)  which is computed using: 
+
+\begin{equation}
+ \overline{t_{ik}} =
+  \begin{cases}
+               \frac{1}{1+ (\frac{b d_{ik}^2}{\overline{\gamma_i}})^{\frac{2}{\eta_1-1}}}                     & if \:\: \frac{1}{1+ (\frac{b d_{ik}^2}{\overline{\gamma_i}})^{\frac{2}{\eta_1-1}}} > \frac{1}{1+ (\frac{ b d_{ik}^2}{\underline{\gamma_i}})^{\frac{2}{\eta_2-1}}} \\
+ \frac{1}{1+ (\frac{b d_{ik}^2}{\underline{\gamma_i}})^{\frac{2}{\eta_2-1}}}  &\:\:\:otherwise \\
+ 
+  \end{cases}
+\end{equation}
+
+\begin{equation}
+ \underline{t_{ik}} =
+  \begin{cases}
+               \frac{1}{1+ (\frac{b d_{ik}^2}{\overline{\gamma_i}})^{\frac{2}{\eta_1-1}}}                     & if \:\: \frac{1}{1+ (\frac{b d_{ik}^2}{\overline{\gamma_i}})^{\frac{2}{\eta_1-1}}} \leq \frac{1}{1+ (\frac{ b d_{ik}^2}{\underline{\gamma_i}})^{\frac{2}{\eta_2-1}}} \\
+ \frac{1}{1+ (\frac{b d_{ik}^2}{\underline{\gamma_i}})^{\frac{2}{\eta_2-1}}}  &\:\:\:otherwise \\
+ 
+  \end{cases}
+\end{equation}
+
+where, $\overline{\gamma_i}$ and $\underline{\gamma_i}$ are constants defined as: 
+
+
+\begin{equation}
+\overline{\gamma_i}= K \frac{\sum_{k=1}^n \overline{u}_{ik} d_{ik}^2}{\sum_{k=1}^n \overline{u}_{ik}}
+\end{equation}
+
+\begin{equation}
+\underline{\gamma_i}= K \frac{\sum_{k=1}^n \underline{u}_{ik} d_{ik}^2}{\sum_{k=1}^n \underline{u}_{ik}}
+\end{equation}
+
+
+In type-1 PFCM, we get crisp set of cluster centers denoted by $v$=$\{$$v_1$, $v_2$…$v_c$$\}$, where, $c$ gives the number of clusters. Since here we are using interval type-2 PFCM, we obtain an interval of the possible cluster centers given by $v_R$=$\{$$v_{1R}$, $v_{2R}$…$v_{mR}$$\}$ and $v_L$=$\{$$v_{1L}$, $v_{2L}$…$v_{mL}$$\}$,  where $v_R$  gives the rightmost boundary of the cluster center for each of the c clusters and $v_L$ gives the leftmost boundary of the cluster center for each of the c clusters. We represent this interval by: 
+
+\begin{equation}
+v_{\tilde{X}}= [\: v_L, v_R\:]
+\end{equation}
+
+We perform type-reduction using EIASC algorithm [23] to obtain the above $v_L$ and $v_R$ from the initially set UMF and LMF and compute the crisp cluster center using the defuzzification equation: 
+\begin{equation}
+v=  \frac{v_L+ v_R}{2}
+\end{equation}
+
+The crisp cluster center obtained in the equation above is used to compute the membership and typicality values from (15),(16),(18) and (19). This process repeats iteratively until the optimal constant solution for the cluster centers is obtained. 
+Once the cluster centroids are computed, final clustering is done by employing hard-partitioning in the following manner: 
+
+\begin{equation}
+ If \:\:d_{ki}< d_{kj},\:\: for \:\: j=1,2…c \:\:and\:\: i  \neq j \:\:and\:\: k=1,2…n, \:\:\:\: 
+then,\:\: x_k \:\: is \:\: assigned \:\: to\:\: the\:\: cluster\:\: i.	
+\end{equation}
+
+
+We now give a step-by-step description of the proposed interval type-2 PFCM followed by a flowchart of the same: 
+
+\textbf{Step 1.}
+Set the values of fuzzifiers $m_1$ and $m_2$; parameter $\eta_1$and $\eta_2$; constants $a$ and $b$. Set the initial cluster centers as $v'$=$\{$ $v'_1$, $v'_2$...$v'_m$ $\}$. Calculate the distances $d_{ik}$ using equation(17).
+
+\textbf{Step 2.}
+The membership values $\overline{u}_{ik}$, $\underline{u}_{ik}$ using equations (15) and (16); $\overline{\gamma_i}$ $\underline{\gamma_i}$ using equations (20) and (21); the typicality values $\overline{t}_{ik}$, $\underline{t}_{ik}$ using equations (18) and (19); and  set $m$ and $\eta$ to arbitrary values. Compute the centroids $v'_{i,RU}$, $v'_{i,RT}$, $v'_{i,LU}$ and $v'_{i,LT}$ using the values ${u}_{ik}$ and $t_{ik}$, where 
+
+\begin{equation}
+u_{ik}= \frac{\overline{u}_{ik} + \underline{u}_{ik}}{2}
+\end{equation}
+
+\begin{equation}
+t_{ik}= \frac{\overline{t}_{ik} + \underline{t}_{ik}}{2}
+\end{equation}
+
+\begin{equation}
+v'_{i,RU}=v'_{i,LU}= \frac{\sum_{k=1}^n {(u_{ik})^m X_k}}{\sum_{k=1}^n {(u_{ik})^m }}
+\end{equation}
+
+
+\begin{equation}
+v'_{i,RT}=v'_{i,LT}= \frac{\sum_{k=1}^n {(t_{ik})^m X_k}}{\sum_{k=1}^n {(t_{ik})^m }}
+\end{equation}
+
+
+\textbf{Step 3.}
+Apply EIASC algorithm to calculate $v'_{i,L}$ and $v'_{i,R}$ separately and compute the new cluster centers by the equation: 
+
+\begin{equation}
+v''_i= \frac{v'_{i,R} + v'_{i,L}}{2}
+\end{equation}
+
+and hence, we get the new set of cluster centroids given by $v''$=$\{$ $v''_1$, $v''_2$....$v''_m$ $\}$
+
+\textbf{Step 4.}
+Compare the cluster centroids $v'$ and $v''$. If they are equal, we procede to Step5., else update $v'$ as given below and continue with step 2 until the cluster centroids converge.
+
+\begin{equation}
+v'=v''
+\end{equation}
+
+\textbf{Step 5.}
+Set the final center centroids as $v$ and perform hard partition according to the equation (24).
+
+\begin{equation}
+v=v''
+\end{equation}
+
+We further demonstrate our algorithm with IT2-PFCM flowchart in Figure 3.
+
+\vspace{5mm}
+\tikzstyle{startstop} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm,text centered, draw=black, fill=red!30]
+\tikzstyle{io} = [trapezium, trapezium left angle=70, trapezium right angle=110, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=blue!30]
+\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=orange!30]
+\tikzstyle{decision} = [diamond,aspect=3, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=green!30]
+\tikzstyle{arrow} = [thick,->,>=stealth]
+
+\begin{figure} [!htb]
+%\captionsetup{justification=centering}
+\centering
+\begin{tikzpicture}[node distance=2cm, every node/.style={scale=0.6}]
+\node (start) [startstop] {Start};
+\node (in1) [io, below of=start,text width=5cm] {Take the multi-dimensional data samples as input};
+\node (pro1) [process, below of=in1,text width=5cm] {Initialization of exemplars and various parameters};
+\node (pro2) [process, below of=pro1,text width=5cm] {Calculation of feature-wise distance and initial fuzzy mean distance between the patterns and exemplars};
+\node (pro3) [process, below of=pro2,text width=5cm] {Calculation of the mean deviation and the interval of fuzzy membership degree};
+\node (pro4) [process, below of=pro3,text width=5cm] {Updating the fuzzy mean distance};
+\node (dec1) [decision, below of=pro4,text width=5cm,yshift=-0.5cm] {Has the iteration accuracy ($\varepsilon$) been reached?};
+\node (pro5) [process, below of=dec1,text width=5cm,,yshift=-0.5cm] {Calculation of the fuzzy statistical similarity(FSS) and initialization of the $\textit{r}$ and $\textit{a}$ matrices};
+\node (pro6) [process, below of=pro5,text width=5cm] {Updating the $\textit{r}$ and $\textit{a}$ matrices};
+\node (pro7) [process, below of=pro6,text width=5cm] {Identifying the cluster exemplars and the assignment of the sample data to different clusters};
+\node (dec2) [decision, below of=pro7,text width=5cm,yshift=-0.5cm] {Has the cluster exemplars converged?};
+\node (out1) [io, below of=dec2,text width=5cm,,yshift=-0.5cm] {Display the final cluster exemplars along with their cluster points};
+\node (stop) [startstop, below of=out1] {Stop};
+
+\draw [arrow] (start)--(in1);
+\draw [arrow] (in1)--(pro1);
+\draw [arrow] (pro1)--(pro2);
+\draw [arrow] (pro2)--(pro3);
+\draw [arrow] (pro3)--(pro4);
+\draw [arrow] (pro4)--(dec1);
+\draw [arrow] (dec1) -- node[anchor=west] {yes} (pro5);
+\draw [arrow] (dec1.east) -- ++(2em,0) node[above] {no} -- ++(2em,0) |- (pro3.east);
+
+\draw [arrow] (pro5)--(pro6);
+\draw [arrow] (pro6)--(pro7);
+\draw [arrow] (pro7)--(dec2);
+\draw [arrow] (dec2) -- node[anchor=west] {yes} (out1);
+\draw [arrow] (dec2.east) -- ++(2em,0) node[above] {no} -- ++(2em,0) |- (pro6.east);
+\draw [arrow] (out1)--(stop);
+
+\end{tikzpicture}
+\caption{IT2 FS-AP algorithm flowchart}
+\end{figure}
+
+\subsection{General Type-2 Possibilistic Fuzzy-C-Means}
+Type-2 fuzzy sets are incorporated to account for the uncertainty in the values of the fuzzifier $m$ and the parameter $\eta$. In interval type-2, we consider an interval for both the $m$ and $\eta$ with uniform distribution of one throughout the interval. This constrains the distribution in the interval thereby effectively resulting in a blurred type-1 fuzzy set. In general type-2, the distribution of $m$ and $\eta$ in the interval $J_x$ and $K_x$ respectively, is given by a secondary grade membership function, $\mu_{\tilde{A}}(x,u)$  which thus results in general type-2 fuzzy sets having more degree of freedoms as compared to interval type-2 fuzzy sets. 
+
+Due to the availability of another degree of freedom in general type-2 fuzzy sets, we now apply PFCM to general type-2 (GT2-PFCM) which is shown to outperform IT2-PFCM. 
+
+A general type-2 fuzzy set is represented as in the equation (10). The general type-2 FOU and secondary membership function are shown in Figure 4 and 5 respectively. 
+
+\begin{figure}[htb]
+\begin{minipage}{0.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{gt2fou}
+  \caption{GT2 footprint of uncertainty}
+  %\label{fig:sfig1}
+\end{minipage}%
+\begin{minipage}{0.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{gt2sg}
+  \caption{GT2 secondary membership function}
+  %\label{fig:sfig1}
+\end{minipage}%
+\end{figure}
+
+
+
+
+The FOU of membership values of  general type-2 fuzzy set is bounded by UMF and LMF which are denoted by $\overline{u_{ik}}$ and $\underline{u_{ik}}$; and the FOU of typicalities are bounded by UT and LT denoted by $\overline{t_{ik}}$ and $\underline{t_{ik}}$  respectively. These values define  $J_x$ and $K_x$ and hence account for fuzziness in the values of $m$ and $\eta$. 
+In IT2-PFCM took an average of $\overline{u_{ik}}$ and $\underline{u_{ik}}$ to compute the membership function $u_{ik}$; and the average of $\overline{t_{ik}}$ and $\underline{t_{ik}}$ to compute the typicality $t_{ik}$ as per the equations (25) and (26). However, this was possible because in interval type-2 the secondary grade function is uniformly one throughout the fuzzy interval. In case of general type-2, the secondary grade is not uniform and hence there are unequal weights of values lying in the interval $J_x$ and $K_x$. 
+
+To apply PFCM to general type-2 fuzzy sets, we use the $\alpha$-planes representation of general type-2 fuzzy sets as suggested by Linda and Manic for GT2-FCM in [21]. An $\alpha$-plane $\tilde{A_{\alpha}}$ of a GT2fuzzy set $\tilde{A}$ can be defined as the union of all primary memberships of $\tilde{A}$ with secondary grades greater than or equal to $\alpha$.
+
+
+\begin{equation}
+\tilde{A_{\alpha}}= \int_{\forall x \in{A}}\int_{\forall \mu \in{J_x}}{ \{(x,u)|\mu_{\tilde{A}} \geq \alpha  \}}
+\end{equation}
+
+The $\alpha$-cut of secondary membership function can be denoted as $S_{\tilde{A}}(x|\alpha)$ and its interval is represented as: 
+
+\begin{equation}
+S_{\tilde{A}}(x|\alpha)= [\: s_{\tilde{A}}^L(x|\alpha), s_{\tilde{A}}^R(x|\alpha) \:]
+\end{equation}
+
+Thus, we can repesent an $\alpha$-plane as a composition of $\alpha$-cuts of all secondary membership functions.
+
+\begin{equation}
+\tilde{A_{\alpha}}= \int_{\forall x \in{A}} {S_{\tilde{A}}(x|\alpha)}
+\end{equation}
+
+By raising the $\alpha$-plane $\tilde{A_{\alpha}}$ to the level of $\alpha$, a special IT2 fuzzy set is created. This set was named $\alpha$-level T2 fuzzy set
+$R_{\tilde{A_{\alpha}}}(x,u)$ in [20] and [24] and was denoted as: 
+
+\begin{equation}
+R_{\tilde{A_{\alpha}}}(x,u)= \alpha/\tilde{A_{\alpha}} \forall x \: \in{A}, \forall \mu \: \in{J_x} 
+\end{equation}
+
+The GT2 fuzzy set $\tilde{A}$ can be constructed from the composition of all the $\alpha$-level T2 fuzzy sets:
+\begin{equation}
+\tilde{A}=\bigcup_{\alpha \in{[0,1]}} \alpha / {\tilde{A_{\alpha}}}
+\end{equation}
+
+In T2 PFCM, we need to find the uncertainty involved with the fuzzifier $m$ and the parameter $\eta$. For IT2-PFCM, we define the intervals [$m_1$ , $m_2$] and [$\eta_1$ , $\eta_2$], which have a uniform distribution of uncertainty about the appropriate value of the fuzzifier $m$ and parameter $\eta$.In the case of GT2 PFCM, the concept of linguistic fuzzifier is used, which is denoted by a type-1 fuzzy set(e.g. ”small” or”high”), M[21].Since PFCM another parameter $\eta$, we extend this theory to $\eta$ as well by taking linguistic paramter as H. Two examples of depicting the linguistic notion of the appropriate fuzzifier(parameter) value for the GT2 PFCM algorithm is shown using three linguistic terms in Figure-. We represent the linguistic fuzzifier(paramter), M(H), with the help of its $alpha$-cuts as follows:
+
+
+\begin{equation}
+M= \bigcup _{\alpha \in{[0,1]}} \alpha / S_M(\alpha)
+\end{equation}
+
+and, 
+
+\begin{equation}
+H= \bigcup _{\alpha \in{[0,1]}} \alpha / S_H(\alpha)
+\end{equation}
+
+where, 
+
+\begin{equation}
+S_{M}(x|\alpha)= [\: s_{M}^L(x|\alpha), s_{M}^R(x|\alpha) \:]
+\end{equation}
+
+and, 
+
+\begin{equation}
+S_{H}(x|\alpha)= [\: s_{H}^L(x|\alpha), s_{H}^R(x|\alpha) \:]
+\end{equation}
+
+
+The linguistic fuzzifier, M, and the linguistic paramter, H, are used to construct the secondary membership funcions for our GT2 model. The GT2 fuzzy membership function and typicality for cluster $v_i$ can be obtained as:
+
+\begin{equation}
+{\tilde{u}}_{i}= \sum_{x_k \in{X}} {\tilde{u}}_{ik}
+\end{equation}
+and
+\begin{equation}
+{\tilde{t}}_{i}= \sum_{x_k \in{X}} {\tilde{t}}_{ik}
+\end{equation}
+ 
+The secondary membership function ${\tilde{u}}_{ik}$ and secondary typicality ${\tilde{t}}_{ik}$  can be expressed with the help of $alpha$-cuts as follows:
+
+\begin{equation}
+{\tilde{u}}_{ik}= \bigcup _{\alpha \in{[0,1]}} \alpha / S_{{\tilde{u}}_i}(x_k/\alpha) = \bigcup _{\alpha \in{[0,1]}} \alpha / [\: s_{{\tilde{u}}_i}^L(x_k|\alpha), s_{{\tilde{u}}_i}^R(x_k|\alpha) \:]
+\end{equation}
+
+and
+
+\begin{equation}
+{\tilde{t}}_{ik}= \bigcup _{\alpha \in{[0,1]}} \alpha / S_{{\tilde{t}}_i}(x_k/\alpha) = \bigcup _{\alpha \in{[0,1]}} \alpha / [\: s_{{\tilde{t}}_i}^L(x_k|\alpha), s_{{\tilde{t}}_i}^R(x_k|\alpha) \:]
+\end{equation}
+
+Thus, we see that with this representation of the seconday membership and typicality function as linguistic fuzzifier, B, and linguistic parameter ,H, having $\alpha$-planes at different levels, the secondary membership and typicality degrees can be calculated by a combination of IT2 fuzzy sets. The
+upper and lower boundaries of the secondary degrees for each $\alpha$-plane in determined from B and H. Let the number of $alpha$-planes considered be $p$ with $\alpha$={$\alpha_1$, $_alpha_2$....$\alpha_p$}. The upper and lower boundaries for the secondary membership degree and typicality value is calculated as follows:
+
+\begin{equation}
+s_{{\tilde{u}}_i}^L(x_k|\alpha)=
+  \begin{cases}
+               \frac{1}{\sum_{l=1}^c{(\frac{d_ik}{d_lk})^{(\frac{2}{s_{M}^L(\alpha)-1})}}} & if \:\: \frac{1}{\sum_{l=1}^c{(\frac{d_ik}{d_lk})^{(\frac{2}{s_{M}^L(\alpha)-1})}}} \leq \frac{1}{\sum_{l=1}^c{(\frac{d_ik}{d_lk})^{(\frac{2}{s_{M}^R(\alpha)-1})}}} \\
+ \frac{1}{\sum_{l=1}^c{(\frac{d_ik}{d_lk})^{(\frac{2}{s_{M}^R(\alpha)-1})}}} &\:\:\:otherwise \\
+ 
+  \end{cases}
+\end{equation}
+
+\begin{equation}
+s_{{\tilde{u}}_i}^R(x_k|\alpha)=
+  \begin{cases}
+               \frac{1}{\sum_{l=1}^c{(\frac{d_ik}{d_lk})^{(\frac{2}{s_{M}^L(\alpha)-1})}}} & if \:\: \frac{1}{\sum_{l=1}^c{(\frac{d_ik}{d_lk})^{(\frac{2}{s_{M}^L(\alpha)-1})}}} > \frac{1}{\sum_{l=1}^c{(\frac{d_ik}{d_lk})^{(\frac{2}{s_{M}^R(\alpha)-1})}}} \\
+ \frac{1}{\sum_{l=1}^c{(\frac{d_ik}{d_lk})^{(\frac{2}{s_{M}^R(\alpha)-1})}}} &\:\:\:otherwise \\
+ 
+  \end{cases}
+\end{equation}
+
+and, 
+
+\begin{equation}
+s_{{\tilde{t}}_i}^L(x_k|\alpha)=
+  \begin{cases}
+              \frac{1}{1+ (\frac{b d_{ik}^2}{\overline{\gamma_i}})^{\frac{2}{s_H^L-1}}}                     & if \:\: \frac{1}{1+ (\frac{b d_{ik}^2}{\overline{\gamma_i}})^{\frac{2}{s_H^L-1}}} \leq \frac{1}{1+ (\frac{ b d_{ik}^2}{\underline{\gamma_i}})^{\frac{2}{s_H^R-1}}} \\
+ \frac{1}{1+ (\frac{b d_{ik}^2}{\underline{\gamma_i}})^{\frac{2}{s_H^R-1}}}  &\:\:\:otherwise \\
+ 
+  \end{cases}
+\end{equation}
+
+\begin{equation}
+s_{{\tilde{t}}_i}^R(x_k|\alpha)=
+  \begin{cases}
+              \frac{1}{1+ (\frac{b d_{ik}^2}{\overline{\gamma_i}})^{\frac{2}{s_H^L-1}}}                     & if \:\: \frac{1}{1+ (\frac{b d_{ik}^2}{\overline{\gamma_i}})^{\frac{2}{s_H^L-1}}} > \frac{1}{1+ (\frac{ b d_{ik}^2}{\underline{\gamma_i}})^{\frac{2}{s_H^R-1}}} \\
+ \frac{1}{1+ (\frac{b d_{ik}^2}{\underline{\gamma_i}})^{\frac{2}{s_H^R-1}}}  &\:\:\:otherwise \\
+ 
+  \end{cases}
+\end{equation}
+
+
+where, $i$={1,2...c} and $k$={1,2...n} and, 
+
+\begin{equation}
+\overline{\gamma_i}= K \frac{\sum_{k=1}^n s_{{\tilde{u}}_i}^R(x_k|\alpha) d_{ik}^2}{\sum_{k=1}^n s_{{\tilde{u}}_i}^R(x_k|\alpha)}
+\end{equation}
+
+\begin{equation}
+\underline{\gamma_i}= K \frac{\sum_{k=1}^n s_{{\tilde{u}}_i}^L(x_k|\alpha) d_{ik}^2}{\sum_{k=1}^n s_{{\tilde{u}}_i}^L(x_k|\alpha)}
+\end{equation}
+
+In IT2 PFCM, we computed $u_{ik}$ and $t_{ik}$ using equations (25) and (26), in case of GT-2, we compute $u_{ik}$ and $t_{ik}$ as follows: 
+
+\begin{equation}
+u_{ik}= \frac{\sum_{l=1}^p {\alpha_l}(s_{{\tilde{u}}_i}^L(x_k|\alpha)+s_{{\tilde{u}}_i}^R(x_k|\alpha) )}{2 \sum_{l=1}^p {\alpha_l}}	
+\end{equation}
+
+\begin{equation}
+t_{ik}=\frac{\sum_{l=1}^p {\alpha_l}(s_{{\tilde{t}}_i}^L(x_k|\alpha)+s_{{\tilde{t}}_i}^R(x_k|\alpha) )}{2 \sum_{l=1}^p {\alpha_l}}
+\end{equation}
+
+The resulting $u_{ik}$ and $t_{ik}$ are used in the GT2-PFCM algorithm to determine the cluster prototypes and hence the clusters.
+
+We now provide a step-by-step description of our proposed algorithm followed by a flowchart of the same: 
+
+\textbf{Step 1.}
+Set the values of fuzzifiers $m_1$ and $m_2$; parameter $\eta_1$and $\eta_2$; constants $a$ and $b$. Set the initial cluster centers as $v'$=$\{$ $v'_1$, $v'_2$...$v'_m$ $\}$. Calculate the distances $d_{ik}$ using equation(17).
+
+\textbf{Step 2.}
+The membership values $\overline{u}_{ik}$, $\underline{u}_{ik}$ using equations (15) and (16); $\overline{\gamma_i}$ $\underline{\gamma_i}$ using equations (20) and (21); the typicality values $\overline{t}_{ik}$, $\underline{t}_{ik}$ using equations (18) and (19); and  set $m$ and $\eta$ to arbitrary values. Compute the centroids $v'_{i,RU}$, $v'_{i,RT}$, $v'_{i,LU}$ and $v'_{i,LT}$ using the values ${u}_{ik}$ and $t_{ik}$ from equations (51), (52), (27) and (28).
+
+
+
+\textbf{Step 3.}
+Apply EIASC algorithm to calculate $v'_{i,L}$ and $v'_{i,R}$ separately and compute the new cluster centers by the equation (29) and hence, we get the new set of cluster centroids given by $v''$=$\{$ $v''_1$, $v''_2$....$v''_m$ $\}$
+
+\textbf{Step 4.}
+Compare the cluster centroids $v'$ and $v''$. If they are equal, we procede to Step5., else update $v'$ as given below and continue with step 2 until the cluster centroids converge.
+
+\begin{equation}
+v'=v''
+\end{equation}
+
+\textbf{Step 5.}
+Set the final center centroids as $v$ and perform hard partition according to the equation (24).
+
+\begin{equation}
+v=v''
+\end{equation}
+
+We now demonstrate our proposed algorithm by a flowchart as shown in Figure 6.
+
+\vspace{5mm}
+\tikzstyle{startstop} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm,text centered, draw=black, fill=red!30]
+\tikzstyle{io} = [trapezium, trapezium left angle=70, trapezium right angle=110, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=blue!30]
+\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=orange!30]
+\tikzstyle{decision} = [diamond,aspect=3, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=green!30]
+\tikzstyle{arrow} = [thick,->,>=stealth]
+
+\begin{figure} [!htb]
+%\captionsetup{justification=centering}
+\centering
+\begin{tikzpicture}[node distance=2cm, every node/.style={scale=0.6}]
+\node (start) [startstop] {Start};
+\node (in1) [io, below of=start,text width=5cm] {Take the multi-dimensional data samples as input};
+\node (pro1) [process, below of=in1,text width=5cm] {Initialization of exemplars and various parameters};
+\node (pro2) [process, below of=pro1,text width=5cm] {Calculation of feature-wise distance and initial fuzzy mean distance between the patterns and exemplars};
+\node (pro3) [process, below of=pro2,text width=5cm] {Calculation of the mean deviation and the interval of fuzzy membership degree};
+\node (pro4) [process, below of=pro3,text width=5cm] {Updating the fuzzy mean distance};
+\node (dec1) [decision, below of=pro4,text width=5cm,yshift=-0.5cm] {Has the iteration accuracy ($\varepsilon$) been reached?};
+\node (pro5) [process, below of=dec1,text width=5cm,,yshift=-0.5cm] {Calculation of the fuzzy statistical similarity(FSS) and initialization of the $\textit{r}$ and $\textit{a}$ matrices};
+\node (pro6) [process, below of=pro5,text width=5cm] {Updating the $\textit{r}$ and $\textit{a}$ matrices};
+\node (pro7) [process, below of=pro6,text width=5cm] {Identifying the cluster exemplars and the assignment of the sample data to different clusters};
+\node (dec2) [decision, below of=pro7,text width=5cm,yshift=-0.5cm] {Has the cluster exemplars converged?};
+\node (out1) [io, below of=dec2,text width=5cm,,yshift=-0.5cm] {Display the final cluster exemplars along with their cluster points};
+\node (stop) [startstop, below of=out1] {Stop};
+
+\draw [arrow] (start)--(in1);
+\draw [arrow] (in1)--(pro1);
+\draw [arrow] (pro1)--(pro2);
+\draw [arrow] (pro2)--(pro3);
+\draw [arrow] (pro3)--(pro4);
+\draw [arrow] (pro4)--(dec1);
+\draw [arrow] (dec1) -- node[anchor=west] {yes} (pro5);
+\draw [arrow] (dec1.east) -- ++(2em,0) node[above] {no} -- ++(2em,0) |- (pro3.east);
+
+\draw [arrow] (pro5)--(pro6);
+\draw [arrow] (pro6)--(pro7);
+\draw [arrow] (pro7)--(dec2);
+\draw [arrow] (dec2) -- node[anchor=west] {yes} (out1);
+\draw [arrow] (dec2.east) -- ++(2em,0) node[above] {no} -- ++(2em,0) |- (pro6.east);
+\draw [arrow] (out1)--(stop);
+
+\end{tikzpicture}
+\caption{GT2 FS-AP algorithm flowchart}
+\end{figure}
+
+% needed in second column of first page if using \IEEEpubid
+%\IEEEpubidadjcol
+
+%\subsubsection{Subsubsection Heading Here}
+%Subsubsection text here.
+
+
+% An example of a floating figure using the graphicx package.
+% Note that \label must occur AFTER (or within) \caption.
+% For figures, \caption should occur after the \includegraphics.
+% Note that IEEEtran v1.7 and later has special internal code that
+% is designed to preserve the operation of \label within \caption
+% even when the captionsoff option is in effect. However, because
+% of issues like this, it may be the safest practice to put all your
+% \label just after \caption rather than within \caption{}.
+%
+% Reminder: the "draftcls" or "draftclsnofoot", not "draft", class
+% option should be used if it is desired that the figures are to be
+% displayed while in draft mode.
+%
+%\begin{figure}[!t]
+%\centering
+%\includegraphics[width=2.5in]{myfigure}
+% where an .eps filename suffix will be assumed under latex, 
+% and a .pdf suffix will be assumed for pdflatex; or what has been declared
+% via \DeclareGraphicsExtensions.
+%\caption{Simulation results for the network.}
+%\label{fig_sim}
+%\end{figure}
+
+% Note that the IEEE typically puts floats only at the top, even when this
+% results in a large percentage of a column being occupied by floats.
+
+
+% An example of a double column floating figure using two subfigures.
+% (The subfig.sty package must be loaded for this to work.)
+% The subfigure \label commands are set within each subfloat command,
+% and the \label for the overall figure must come after \caption.
+% \hfil is used as a separator to get equal spacing.
+% Watch out that the combined width of all the subfigures on a 
+% line do not exceed the text width or a line break will occur.
+%
+%\begin{figure*}[!t]
+%\centering
+%\subfloat[Case I]{\includegraphics[width=2.5in]{box}%
+%\label{fig_first_case}}
+%\hfil
+%\subfloat[Case II]{\includegraphics[width=2.5in]{box}%
+%\label{fig_second_case}}
+%\caption{Simulation results for the network.}
+%\label{fig_sim}
+%\end{figure*}
+%
+% Note that often IEEE papers with subfigures do not employ subfigure
+% captions (using the optional argument to \subfloat[]), but instead will
+% reference/describe all of them (a), (b), etc., within the main caption.
+% Be aware that for subfig.sty to generate the (a), (b), etc., subfigure
+% labels, the optional argument to \subfloat must be present. If a
+% subcaption is not desired, just leave its contents blank,
+% e.g., \subfloat[].
+
+
+% An example of a floating table. Note that, for IEEE style tables, the
+% \caption command should come BEFORE the table and, given that table
+% captions serve much like titles, are usually capitalized except for words
+% such as a, an, and, as, at, but, by, for, in, nor, of, on, or, the, to
+% and up, which are usually not capitalized unless they are the first or
+% last word of the caption. Table text will default to \footnotesize as
+% the IEEE normally uses this smaller font for tables.
+% The \label must come after \caption as always.
+%
+%\begin{table}[!t]
+%% increase table row spacing, adjust to taste
+%\renewcommand{\arraystretch}{1.3}
+% if using array.sty, it might be a good idea to tweak the value of
+% \extrarowheight as needed to properly center the text within the cells
+%\caption{An Example of a Table}
+%\label{table_example}
+%\centering
+%% Some packages, such as MDW tools, offer better commands for making tables
+%% than the plain LaTeX2e tabular which is used here.
+%\begin{tabular}{|c||c|}
+%\hline
+%One & Two\\
+%\hline
+%Three & Four\\
+%\hline
+%\end{tabular}
+%\end{table}
+
+
+% Note that the IEEE does not put floats in the very first column
+% - or typically anywhere on the first page for that matter. Also,
+% in-text middle ("here") positioning is typically not used, but it
+% is allowed and encouraged for Computer Society conferences (but
+% not Computer Society journals). Most IEEE journals/conferences use
+% top floats exclusively. 
+% Note that, LaTeX2e, unlike IEEE journals/conferences, places
+% footnotes above bottom floats. This can be corrected via the
+% \fnbelowfloat command of the stfloats package.
+
+
+
+
+\section{Conclusion}
+The conclusion goes here.
+
+
+
+
+
+% if have a single appendix:
+%\appendix[Proof of the Zonklar Equations]
+% or
+%\appendix  % for no appendix heading
+% do not use \section anymore after \appendix, only \section*
+% is possibly needed
+
+% use appendices with more than one appendix
+% then use \section to start each appendix
+% you must declare a \section before using any
+% \subsection or using \label (\appendices by itself
+% starts a section numbered zero.)
+%
+
+
+\appendices
+\section{Proof of the First Zonklar Equation}
+Appendix one text goes here.
+
+% you can choose not to have a title for an appendix
+% if you want by leaving the argument blank
+\section{}
+Appendix two text goes here.
+
+
+% use section* for acknowledgment
+\section*{Acknowledgment}
+
+
+The project was conceptualized and completed at the Computational Vision and Fuzzy Systems Lab, Hanyang University.
+
+
+% Can use something like this to put references on a page
+% by themselves when using endfloat and the captionsoff option.
+\ifCLASSOPTIONcaptionsoff
+  \newpage
+\fi
+
+
+
+% trigger a \newpage just before the given reference
+% number - used to balance the columns on the last page
+% adjust value as needed - may need to be readjusted if
+% the document is modified later
+%\IEEEtriggeratref{8}
+% The "triggered" command can be changed if desired:
+%\IEEEtriggercmd{\enlargethispage{-5in}}
+
+% references section
+
+% can use a bibliography generated by BibTeX as a .bbl file
+% BibTeX documentation can be easily obtained at:
+% http://mirror.ctan.org/biblio/bibtex/contrib/doc/
+% The IEEEtran BibTeX style support page is at:
+% http://www.michaelshell.org/tex/ieeetran/bibtex/
+%\bibliographystyle{IEEEtran}
+% argument is your BibTeX string definitions and bibliography database(s)
+%\bibliography{IEEEabrv,../bib/paper}
+%
+% <OR> manually copy in the resultant .bbl file
+% set second argument of \begin to the number of references
+% (used to reserve space for the reference number labels box)
+\begin{thebibliography}{1}
+
+\bibitem{IEEEhowto:kopka}
+H.~Kopka and P.~W. Daly, \emph{A Guide to \LaTeX}, 3rd~ed.\hskip 1em plus
+  0.5em minus 0.4em\relax Harlow, England: Addison-Wesley, 1999.
+
+\end{thebibliography}
+
+% biography section
+% 
+% If you have an EPS/PDF photo (graphicx package needed) extra braces are
+% needed around the contents of the optional argument to biography to prevent
+% the LaTeX parser from getting confused when it sees the complicated
+% \includegraphics command within an optional argument. (You could create
+% your own custom macro containing the \includegraphics command to make things
+% simpler here.)
+%\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{mshell}}]{Michael Shell}
+% or if you just want to reserve a space for a photo:
+
+\begin{IEEEbiography}{Michael Shell}
+Biography text here.
+\end{IEEEbiography}
+
+% if you will not have a photo at all:
+\begin{IEEEbiographynophoto}{John Doe}
+Biography text here.
+\end{IEEEbiographynophoto}
+
+% insert where needed to balance the two columns on the last page with
+% biographies
+%\newpage
+
+\begin{IEEEbiographynophoto}{Jane Doe}
+Biography text here.
+\end{IEEEbiographynophoto}
+
+% You can push biographies down or up by placing
+% a \vfill before or after them. The appropriate
+% use of \vfill depends on what kind of text is
+% on the last page and whether or not the columns
+% are being equalized.
+
+%\vfill
+
+% Can be used to pull up biographies so that the bottom of the last one
+% is flush with the\usepackage{•}  other column.
+%\enlargethispage{-5in}
+
+
+
+% that's all folks
+\end{document}
+
+
