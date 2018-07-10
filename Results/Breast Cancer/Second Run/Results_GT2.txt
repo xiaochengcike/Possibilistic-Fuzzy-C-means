@@ -1,0 +1,22 @@
+The results for General Type-2 are as follows: purity check error rate=3.4335
+
+confusion_matrix =
+
+   438     4
+    20   237
+
+precision=0.99095
+recall=0.95633
+F1 score=0.97333
+
+
+a = 1;              %user defined const a in objective function
+b = 5;             %user defined const b in objective function
+
+mean_m = 2.8;
+std_dev_m = 0.8;          %mean and std deviation for fuzzifier m
+mean_eta = 4.49;
+std_dev_eta = 1;      %mean and std deviation for eta
+alpha = 0.1:0.2:0.9;    %alpha values
+m_array = 1:1:15;        %range of fuzzifier values
+eta_array = 1:1:15;    %range of eta values

@@ -3,7 +3,7 @@
 % d = 2;              %number of dimensions
 % X = rand(n,d);     
 a = 1;              %user defined const a in objective function
-b = 5;             %user defined const b in objective function
+b = 8;             %user defined const b in objective function
 m = 2;              %fuzzifier only for type 1  
 eta = 3;            %pcm uncertainty parameter for type 1
 epsilon = 10^(-4); %error threshold
@@ -13,8 +13,8 @@ eta2 = 3;          %UNCERTAINTY PARAMETERS FOR IT2 PFCM [m1,m2] & [eta1, eta2]
 m1 = 2;
 m2 = 3;
 run_pfcm_type1 = 0;     %Boolean for PFCM Type-1
-run_pfcm_intervaltype2 = 1;     %Boolean for PFCM Type-2
-run_pfcm_generaltype2 = 0;   %Boolean for GT2 PFCM
+run_pfcm_intervaltype2 = 0;     %Boolean for PFCM Type-2
+run_pfcm_generaltype2 = 1;   %Boolean for GT2 PFCM
 labelled_dataset = 1;     %For datasets such as Iris, Breast Cancer etc
 unlabelled_dataset = 0;   %For datasets such as Squares3Clust
 random_X = 0;             %For randomly generated X
@@ -26,10 +26,10 @@ graph_3d_bool = 1;
 purity_checking_bool=1;%gives the purity checking error rate
 f1_score_bool=1;%gives the f1 score
 classification_rate_array=[purity_checking_bool f1_score_bool];%this stores which error rates to print
-mean_m = 2.8;
-std_dev_m = 0.8;          %mean and std deviation for fuzzifier m
-mean_eta = 1.7;
-std_dev_eta = 0.3;      %mean and std deviation for eta
+mean_m = 2.4;
+std_dev_m = 0.9;          %mean and std deviation for fuzzifier m
+mean_eta = 4.49;
+std_dev_eta = 1;      %mean and std deviation for eta
 alpha = 0.1:0.2:0.9;    %alpha values
 m_array = 1:1:15;        %range of fuzzifier values
 eta_array = 1:1:15;    %range of eta values
@@ -55,8 +55,7 @@ if labelled_dataset
 %     [X Y]=get_text_data('Bridge.txt',3);%getting data for bridge data dataset
     c = size(unique(y),1);
     d = size(X,2);
-    n = size(X,1);
-    
+    n = size(X,1);    
 end
 
 if run_pfcm_generaltype2
@@ -103,7 +102,7 @@ if run_pfcm_type1
     [V_t1 U_t1 T_t1] = get_final_values_pfcm_type1(X,c,n,d,m,eta,a,b,gamma,epsilon,max_iter,V);
    
     if graph_2d_bool
-         figure;
+       figure;
        graph_2d(X,V_t1,U_t1);
     end
     if graph_3d_bool
