@@ -5,15 +5,15 @@
 a = 2;              %user defined const a in objective function
 b = 5;             %user defined const b in objective function
 m = 2;              %fuzzifier only for type 1  
-eta = 7;            %pcm uncertainty parameter for type 1
+eta = 3;            %pcm uncertainty parameter for type 1
 epsilon = 10^(-4); %error threshold
 max_iter = 1000;   %max number of iterations before exit
 eta1 = 2;
 eta2 = 3;          %UNCERTAINTY PARAMETERS FOR IT2 PFCM [m1,m2] & [eta1, eta2]
 m1 = 2;
-m2 = 7;
-run_pfcm_type1 = 0;     %Boolean for PFCM Type-1
-run_pfcm_intervaltype2 = 0;     %Boolean for PFCM Type-2
+m2 = 3;
+run_pfcm_type1 = 1;     %Boolean for PFCM Type-1
+run_pfcm_intervaltype2 = 1;     %Boolean for PFCM Type-2
 run_pfcm_generaltype2 = 1;   %Boolean for GT2 PFCM
 labelled_dataset = 1;     %For datasets such as Iris, Breast Cancer etc
 unlabelled_dataset = 0;   %For datasets such as Squares3Clust
@@ -21,14 +21,14 @@ random_X = 0;             %For randomly generated X
 normalrandom_X = 0;       %For normal random X
 graph_2d_bool = 0;
 graph_2d_conv = 0;
-graph_3d_conv = 0;
+graph_3d_conv = 0;       %Boolean values for 2D and 3D graphs
 graph_3d_bool = 1;
 purity_checking_bool=1;%gives the purity checking error rate
 f1_score_bool=1;%gives the f1 score
 classification_rate_array=[purity_checking_bool f1_score_bool];%this stores which error rates to print
-mean_m = 4;
-std_dev_m = 1;          %mean and std deviation for fuzzifier m
-mean_eta = 2;
+mean_m = 2.8;
+std_dev_m = 0.8;          %mean and std deviation for fuzzifier m
+mean_eta = 1.7;
 std_dev_eta = 0.3;      %mean and std deviation for eta
 alpha = 0.1:0.2:0.9;    %alpha values
 m_array = 1:1:15        %range of fuzzifier values
@@ -62,22 +62,36 @@ end
 if run_pfcm_generaltype2
     [V_init U] = get_final_values_fcm(X,c,n,d,m,epsilon,max_iter);
     gamma = calculate_gamma(X,V_init,U,c,n,m);
-    [V_gt2 U_gt2 T] = get_final_values_pfcm_generaltype2(X,c,n,d,alpha,m_array, mean_m,std_dev_m,eta_array,mean_eta,std_dev_eta,a,b,gamma,epsilon,max_iter,V_init);
-    
+    [V_gt2 U_gt2 T_gt2] = get_final_values_pfcm_generaltype2(X,c,n,d,alpha,m_array, mean_m,std_dev_m,eta_array,mean_eta,std_dev_eta,a,b,gamma,epsilon,max_iter,V_init);
+    if graph_2d_bool
+        figure;
+       graph_2d(X,V_gt2,U_gt2);
+    end
+    if graph_3d_bool 
+        figure;
+        graph_3d(X,V_gt2,U_gt2,'g',200,'o',1);
+    end
+    if labelled_dataset
+        fprintf("The results for General Type-2 are as follows: ");
+        classification_rate(X,V_gt2,U_gt2,y,classification_rate_array);
+    end
 end
 
 if run_pfcm_intervaltype2
     [V U] = get_final_values_fcm(X,c,n,d,m,epsilon,max_iter);
     gamma = calculate_gamma(X,V,U,c,n,m);
-    [V_it2 U_it2 T] = get_final_values_pfcm_intervaltype2(X,c,n,d,m1,m2,eta1,eta2,a,b,gamma,epsilon,max_iter,V);
+    [V_it2 U_it2 T_it2] = get_final_values_pfcm_intervaltype2(X,c,n,d,m1,m2,eta1,eta2,a,b,gamma,epsilon,max_iter,V);
     
     if graph_2d_bool
+        figure;
        graph_2d(X,V_it2,U_it2);
     end
     if graph_3d_bool 
+        figure;
         graph_3d(X,V_it2,U_it2,'g',200,'o',1);
     end
     if labelled_dataset
+        fprintf("The results for Interval Type-2 are as follows: ");
         classification_rate(X,V_it2,U_it2,y,classification_rate_array);
     end
 %     graph_2d(X,V,U,'r');
@@ -86,7 +100,7 @@ end
 if run_pfcm_type1
     [V U] = get_final_values_fcm(X,c,n,d,m,epsilon,max_iter);
     gamma = calculate_gamma(X,V,U,c,n,m);
-    [V_t1 U_t1 T] = get_final_values_pfcm_type1(X,c,n,d,m,eta,a,b,gamma,epsilon,max_iter,V);
+    [V_t1 U_t1 T_t1] = get_final_values_pfcm_type1(X,c,n,d,m,eta,a,b,gamma,epsilon,max_iter,V);
    
     if graph_2d_bool
          figure;
@@ -97,6 +111,7 @@ if run_pfcm_type1
         graph_3d(X,V_t1,U_t1,'g',200,'o',1);
     end
     if labelled_dataset
+        fprintf("The results for Type-1 are as follows: ");
         classification_rate(X,V_t1,U_t1,y,classification_rate_array);
     end
 %     graph_2d(X,V,U,'r');
@@ -164,7 +179,6 @@ function [V U] = get_final_values_fcm(X,c,n,d,m,epsilon,max_iter)
 %         graph_2d(X,V,U);
     end
 end
-
 
 function V = cluster_update_fcm(X,U,c,n,d,m)
     new_U = U.^m;
@@ -237,7 +251,38 @@ function [V U T] = get_final_values_pfcm_generaltype2(X,c,n,d,alpha,m_array, mea
     U_eta =  gaussian(m_array,std_dev_m,mean_m,0);
     m_list = alpha_cut(m_array,U_fuzz,std_dev_m,mean_m,alpha,0)
     eta_list = alpha_cut(eta_array, U_eta, std_dev_eta, mean_eta, alpha,0)
+    m1_left = m_list(1)
+    m1_right = m_list(10)
+    m2_left = m_list(2)
+    m2_right = m_list(9)
+    m3_left = m_list(3)
+    m3_right = m_list(8)              %ASSIGNING FUZZIFIER VALUES ACCORDING TO ALPHA-CUTS
+    m4_left = m_list(4)
+    m4_right = m_list(7)
+    m5_left = m_list(5)
+    m5_right = m_list(6)
     
+    eta1_left = eta_list(1)
+    eta1_right = eta_list(10)
+    eta2_left = eta_list(2)
+    eta2_right = eta_list(9)
+    eta3_left = eta_list(3)
+    eta3_right = eta_list(8)              %ASSIGNING ETA VALUES ACCORDING TO ALPHA-CUTS
+    eta4_left = eta_list(4)
+    eta4_right = eta_list(7)
+    eta5_left = eta_list(5)
+    eta5_right = eta_list(6)
+    
+    [V_1 U_1 T_1] = get_final_values_pfcm_intervaltype2(X,c,n,d,m1_left,m1_right,eta1_left,eta1_right,a,b,gamma,epsilon,max_iter,V_init);
+    [V_2 U_2 T_2] = get_final_values_pfcm_intervaltype2(X,c,n,d,m2_left,m2_right,eta2_left,eta2_right,a,b,gamma,epsilon,max_iter,V_init);
+    [V_3 U_3 T_3] = get_final_values_pfcm_intervaltype2(X,c,n,d,m3_left,m3_right,eta3_left,eta3_right,a,b,gamma,epsilon,max_iter,V_init);
+    [V_4 U_4 T_4] = get_final_values_pfcm_intervaltype2(X,c,n,d,m4_left,m4_right,eta4_left,eta4_right,a,b,gamma,epsilon,max_iter,V_init);
+    [V_5 U_5 T_5] = get_final_values_pfcm_intervaltype2(X,c,n,d,m5_left,m5_right,eta5_left,eta5_right,a,b,gamma,epsilon,max_iter,V_init);
+    
+    V = (alpha(1).*V_1 + alpha(2).*V_2 + alpha(3).*V_3 + alpha(4).*V_4 + alpha(5).*V_5)./(sum(alpha));  %Weighted average to compute final centroid values
+    U = (alpha(1).*U_1 + alpha(2).*U_2 + alpha(3).*U_3 + alpha(4).*U_4 + alpha(5).*U_5)./(sum(alpha)); %Weighted average to compute final membership values
+    T = (alpha(1).*T_1 + alpha(2).*T_2 + alpha(3).*T_3 + alpha(4).*T_4 + alpha(5).*T_5)./(sum(alpha)); %Weighted average to compute final typicality values
+
 end
 
 function Y=gaussian(X,variance,mean,graph_bool)
