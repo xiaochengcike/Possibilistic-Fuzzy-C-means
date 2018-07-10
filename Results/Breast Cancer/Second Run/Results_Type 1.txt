@@ -1,0 +1,24 @@
+The results for Type-1 are as follows: purity check error rate=4.2918
+
+confusion_matrix =
+
+   444    16
+    14   225
+
+precision=0.96522
+recall=0.96943
+F1 score=0.96732
+
+a = 1;              %user defined const a in objective function
+b = 5;             %user defined const b in objective function
+m = 2;              %fuzzifier only for type 1  
+eta = 3;            %pcm uncertainty parameter for type 1
+
+
+
+Observations: (for Type 1 PFCM)
+1) The change in the value of the user defined constants 'a' and 'eta' doesn't affect the error rate much.
+2) The change in the value of the fuzzifier 'm' highly affects the error rate.
+3) The increase in the value of b increases the training set error (slightly though) because it reduces the importance of the membership, and hence the typicality values have a
+greater influence on the clustering results. The partition matrix (U) is the sole basis on which hard partitioning is done, and since the membership values are less accurate
+it implies that hard-partitioning is also inaccurate.
