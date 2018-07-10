@@ -12,8 +12,8 @@ eta1 = 2;
 eta2 = 3;          %UNCERTAINTY PARAMETERS FOR IT2 PFCM [m1,m2] & [eta1, eta2]
 m1 = 2;
 m2 = 3;
-run_pfcm_type1 = 1;     %Boolean for PFCM Type-1
-run_pfcm_intervaltype2 = 0;     %Boolean for PFCM Type-2
+run_pfcm_type1 = 0;     %Boolean for PFCM Type-1
+run_pfcm_intervaltype2 = 1;     %Boolean for PFCM Type-2
 run_pfcm_generaltype2 = 0;   %Boolean for GT2 PFCM
 labelled_dataset = 1;     %For datasets such as Iris, Breast Cancer etc
 unlabelled_dataset = 0;   %For datasets such as Squares3Clust
@@ -31,7 +31,7 @@ std_dev_m = 0.8;          %mean and std deviation for fuzzifier m
 mean_eta = 1.7;
 std_dev_eta = 0.3;      %mean and std deviation for eta
 alpha = 0.1:0.2:0.9;    %alpha values
-m_array = 1:1:15        %range of fuzzifier values
+m_array = 1:1:15;        %range of fuzzifier values
 eta_array = 1:1:15;    %range of eta values
 
 
@@ -39,7 +39,7 @@ if random_X
     c = 3;              %number of clusters
     n = 100;            %number of points
     d = 2;              %number of dimensions
-     X = rand(n,d);
+    X = rand(n,d);
 end
 
 if normalrandom_X

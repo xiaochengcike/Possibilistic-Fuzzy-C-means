@@ -1,0 +1,21 @@
+The results for Interval Type-2 are as follows: purity check error rate=3.5765
+
+confusion_matrix =
+
+   442     9
+    16   232
+
+precision=0.98004
+recall=0.96507
+F1 score=0.9725
+
+
+a = 1;              %user defined const a in objective function
+b = 5;             %user defined const b in objective function
+eta1 = 2;
+eta2 = 3;          %UNCERTAINTY PARAMETERS FOR IT2 PFCM [m1,m2] & [eta1, eta2]
+m1 = 2;
+m2 = 3;
+
+Observations:
+1) Increase in the value of b intially decreases the error rate but on further increase, the error rate increases and remains constant thereafter. 
