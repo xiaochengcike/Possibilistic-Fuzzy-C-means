@@ -1,0 +1,18 @@
+The results for Type-1 are as follows: purity check error rate=0.86207
+
+confusion_matrix =
+
+   102     2
+     0   128
+
+precision=0.98077
+recall=1
+F1 score=0.99029
+
+Parameters:
+
+a = 1;              %user defined const a in objective function
+b = 5;             %user defined const b in objective function
+m = 2;              %fuzzifier only for type 1  
+eta = 2;            %pcm uncertainty parameter for type 1
+

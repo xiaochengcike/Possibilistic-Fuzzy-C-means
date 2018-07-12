@@ -4,31 +4,31 @@
 % X = rand(n,d);     
 a = 1;              %user defined const a in objective function
 b = 5;             %user defined const b in objective function
-m = 2;              %fuzzifier only for type 1  
-eta = 3;            %pcm uncertainty parameter for type 1
+m = 3;              %fuzzifier only for type 1  
+eta = 2;            %pcm uncertainty parameter for type 1
 epsilon = 10^(-4); %error threshold
 max_iter = 1000;   %max number of iterations before exit
 eta1 = 2;
 eta2 = 3;          %UNCERTAINTY PARAMETERS FOR IT2 PFCM [m1,m2] & [eta1, eta2]
 m1 = 2;
-m2 = 3;
-run_pfcm_type1 = 0;     %Boolean for PFCM Type-1
+m2 = 4;
+run_pfcm_type1 = 1;     %Boolean for PFCM Type-1
 run_pfcm_intervaltype2 = 0;     %Boolean for PFCM Type-2
-run_pfcm_generaltype2 = 1;   %Boolean for GT2 PFCM
+run_pfcm_generaltype2 = 0;   %Boolean for GT2 PFCM
 labelled_dataset = 1;     %For datasets such as Iris, Breast Cancer etc
 unlabelled_dataset = 0;   %For datasets such as Squares3Clust
 random_X = 0;             %For randomly generated X
 normalrandom_X = 0;       %For normal random X
-graph_2d_bool = 0;
+graph_2d_bool = 1;
 graph_2d_conv = 0;
 graph_3d_conv = 0;       %Boolean values for 2D and 3D graphs
-graph_3d_bool = 1;
+graph_3d_bool = 0;
 purity_checking_bool=1;%gives the purity checking error rate
 f1_score_bool=1;%gives the f1 score
 classification_rate_array=[purity_checking_bool f1_score_bool];%this stores which error rates to print
-mean_m = 2.8;
-std_dev_m = 0.8;          %mean and std deviation for fuzzifier m
-mean_eta = 4.49;
+mean_m = 3;
+std_dev_m = 0.9;          %mean and std deviation for fuzzifier m
+mean_eta = 5.4;
 std_dev_eta = 1;      %mean and std deviation for eta
 alpha = 0.1:0.2:0.9;    %alpha values
 m_array = 1:1:15;        %range of fuzzifier values
@@ -51,8 +51,8 @@ end
 
 if labelled_dataset
 %     [X,y]=get_data_iris('iris-dataset.txt',',',5);
-        [X y]=get_text_data('breastCancer.txt',9);%getting data from breast cancer dataset
-%     [X Y]=get_text_data('Bridge.txt',3);%getting data for bridge data dataset
+%       [X y]=get_text_data('breastCancer.txt',9);%getting data from breast cancer dataset
+    [X y]=get_text_data('Bridge.txt',3);%getting data for bridge data dataset
     c = size(unique(y),1);
     d = size(X,2);
     n = size(X,1);    
@@ -64,7 +64,8 @@ if run_pfcm_generaltype2
     [V_gt2 U_gt2 T_gt2] = get_final_values_pfcm_generaltype2(X,c,n,d,alpha,m_array, mean_m,std_dev_m,eta_array,mean_eta,std_dev_eta,a,b,gamma,epsilon,max_iter,V_init);
     if graph_2d_bool
         figure;
-       graph_2d(X,V_gt2,U_gt2);
+%        graph_2d(X,V_gt2,U_gt2);
+         graph_2d(X,V_gt2,U_gt2,'g');
     end
     if graph_3d_bool 
         figure;
@@ -83,7 +84,8 @@ if run_pfcm_intervaltype2
     
     if graph_2d_bool
         figure;
-       graph_2d(X,V_it2,U_it2);
+%        graph_2d(X,V_it2,U_it2);
+        graph_2d(X,V_it2,U_it2,'g');
     end
     if graph_3d_bool 
         figure;
@@ -103,7 +105,8 @@ if run_pfcm_type1
    
     if graph_2d_bool
        figure;
-       graph_2d(X,V_t1,U_t1);
+%        graph_2d(X,V_t1,U_t1);
+        graph_2d(X,V_t1,U_t1,'g');
     end
     if graph_3d_bool
         figure;
@@ -118,15 +121,15 @@ end
 
 % graph_2d(X,V,U,'r');
 
-function graph_2d(X,V,U)
-        color=max((max(U)==U).*linspace(0,1,size(U,1))')';
-        color_2=rand(size(V,1),1);
-        hold on
-        scatter(X(:,1),X(:,2),20, color,"*");
-        scatter(V(:,1),V(:,2),100,color_2,'filled');
-        set(gca,'Color','k')
-        hold off
-end
+% function graph_2d(X,V,U)
+%         color=max((max(U)==U).*linspace(0,1,size(U,1))')';
+%         color_2=rand(size(V,1),1);
+%         hold on
+%         scatter(X(:,1),X(:,2),20, color,"*");
+%         scatter(V(:,1),V(:,2),100,color_2,'filled');
+%         set(gca,'Color','k')
+%         hold off
+% end
 
 % function p=graph_2d(X,V,U,i_color)%i_color as in input color
 %     V=(V-min(X))./(max(X)-min(X))   ; 
@@ -142,6 +145,30 @@ end
 %      set(gca,'Color','k');
 %     hold off
 % end
+
+function p=graph_2d(X,V,U,i_color)%i_color as in input color
+    V=(V-min(X))./(max(X)-min(X))   ; 
+    X=(X-min(X))./(max(X)-min(X));
+    color=max((max(U)==U).*linspace(0,1,size(U,1))')'   ;
+    color=[color color color]-[0 rand() rand()];
+    color_2=rand(size(V,1),1);
+    hold on
+    scatter(X(:,1),X(:,2),200, color,".");
+    p=scatter(V(:,1),V(:,2),200,i_color,"*");
+    xlabel("Feature 1",'FontSize' , 14,'FontWeight' , 'bold');
+    ylabel("Feature 2",'FontSize' , 14,'FontWeight' , 'bold');    
+%     set(gca,'Color','k');
+    hold off
+end
+
+function graph_2d_v2(X,V,U,color)
+    V=(V-min(X))./(max(X)-min(X))  ;  
+    X=(X-min(X))./(max(X)-min(X));
+    color_2=zeros(size(V,1),1);
+    hold on
+    scatter(V(:,1),V(:,2),200,color,'r*');
+    hold off
+end
 
 function p=graph_3d(X,V,U,i_color,point_size,point_shape,filled_color)%i_color as in input color
     V=(V-min(X))./(max(X)-min(X))  ;  
@@ -266,7 +293,7 @@ function [V U T] = get_final_values_pfcm_generaltype2(X,c,n,d,alpha,m_array, mea
     eta2_left = eta_list(2)
     eta2_right = eta_list(9)
     eta3_left = eta_list(3)
-    eta3_right = eta_list(8)              %ASSIGNING ETA VALUES ACCORDING TO ALPHA-CUTS
+    eta3_right = eta_list(8)              %ASSIGNING FUZZIFIER VALUES ACCORDING TO ALPHA-CUTS
     eta4_left = eta_list(4)
     eta4_right = eta_list(7)
     eta5_left = eta_list(5)
@@ -277,11 +304,20 @@ function [V U T] = get_final_values_pfcm_generaltype2(X,c,n,d,alpha,m_array, mea
     [V_3 U_3 T_3] = get_final_values_pfcm_intervaltype2(X,c,n,d,m3_left,m3_right,eta3_left,eta3_right,a,b,gamma,epsilon,max_iter,V_init);
     [V_4 U_4 T_4] = get_final_values_pfcm_intervaltype2(X,c,n,d,m4_left,m4_right,eta4_left,eta4_right,a,b,gamma,epsilon,max_iter,V_init);
     [V_5 U_5 T_5] = get_final_values_pfcm_intervaltype2(X,c,n,d,m5_left,m5_right,eta5_left,eta5_right,a,b,gamma,epsilon,max_iter,V_init);
+%     [V_6 U_6 T_6] = get_final_values_pfcm_intervaltype2(X,c,n,d,m6_left,m6_right,eta6_left,eta6_right,a,b,gamma,epsilon,max_iter,V_init);
+%     [V_7 U_7 T_7] = get_final_values_pfcm_intervaltype2(X,c,n,d,m7_left,m7_right,eta7_left,eta7_right,a,b,gamma,epsilon,max_iter,V_init);
+%     [V_8 U_8 T_8] = get_final_values_pfcm_intervaltype2(X,c,n,d,m8_left,m8_right,eta8_left,eta8_right,a,b,gamma,epsilon,max_iter,V_init);
+%     [V_9 U_9 T_9] = get_final_values_pfcm_intervaltype2(X,c,n,d,m9_left,m9_right,eta9_left,eta9_right,a,b,gamma,epsilon,max_iter,V_init);
+%     [V_5 U_5 T_5] = get_final_values_pfcm_intervaltype2(X,c,n,d,m5_left,m5_right,eta5_left,eta5_right,a,b,gamma,epsilon,max_iter,V_init);
     
-    V = (alpha(1).*V_1 + alpha(2).*V_2 + alpha(3).*V_3 + alpha(4).*V_4 + alpha(5).*V_5)./(sum(alpha));  %Weighted average to compute final centroid values
-    U = (alpha(1).*U_1 + alpha(2).*U_2 + alpha(3).*U_3 + alpha(4).*U_4 + alpha(5).*U_5)./(sum(alpha)); %Weighted average to compute final membership values
-    T = (alpha(1).*T_1 + alpha(2).*T_2 + alpha(3).*T_3 + alpha(4).*T_4 + alpha(5).*T_5)./(sum(alpha)); %Weighted average to compute final typicality values
-
+%     V = (alpha(1).*V_1 + alpha(2).*V_2 + alpha(3).*V_3 + alpha(4).*V_4 + alpha(5).*V_5)./(sum(alpha));  %Weighted average to compute final centroid values
+%     U = (alpha(1).*U_1 + alpha(2).*U_2 + alpha(3).*U_3 + alpha(4).*U_4 + alpha(5).*U_5)./(sum(alpha)); %Weighted average to compute final membership values
+%     T = (alpha(1).*T_1 + alpha(2).*T_2 + alpha(3).*T_3 + alpha(4).*T_4 + alpha(5).*T_5)./(sum(alpha)); %Weighted average to compute final typicality values
+        
+      V = (alpha(1).*V_1 + alpha(2).*V_2 + alpha(3).*V_3 + alpha(4).*V_4+ alpha(5).*V_5)./(sum(alpha));  %Weighted average to compute final centroid values
+      U = (alpha(1).*U_1 + alpha(2).*U_2 + alpha(3).*U_3 + alpha(4).*U_4+ alpha(5).*U_5)./(sum(alpha)); %Weighted average to compute final membership values
+      T = (alpha(1).*T_1 + alpha(2).*T_2 + alpha(3).*T_3 + alpha(4).*T_4+ alpha(5).*T_5)./(sum(alpha)); %Weighted average to compute final typicality values
+  
 end
 
 function Y=gaussian(X,variance,mean,graph_bool)
