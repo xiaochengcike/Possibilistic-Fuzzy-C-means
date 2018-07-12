@@ -4,12 +4,12 @@
 % X = rand(n,d);     
 a = 1;              %user defined const a in objective function
 b = 5;             %user defined const b in objective function
-m = 3;              %fuzzifier only for type 1  
+m = 2;              %fuzzifier only for type 1  
 eta = 2;            %pcm uncertainty parameter for type 1
 epsilon = 10^(-4); %error threshold
 max_iter = 1000;   %max number of iterations before exit
 eta1 = 2;
-eta2 = 3;          %UNCERTAINTY PARAMETERS FOR IT2 PFCM [m1,m2] & [eta1, eta2]
+eta2 = 5;          %UNCERTAINTY PARAMETERS FOR IT2 PFCM [m1,m2] & [eta1, eta2]
 m1 = 2;
 m2 = 4;
 run_pfcm_type1 = 1;     %Boolean for PFCM Type-1
@@ -17,9 +17,12 @@ run_pfcm_intervaltype2 = 0;     %Boolean for PFCM Type-2
 run_pfcm_generaltype2 = 0;   %Boolean for GT2 PFCM
 labelled_dataset = 1;     %For datasets such as Iris, Breast Cancer etc
 unlabelled_dataset = 0;   %For datasets such as Squares3Clust
+comparison_m = 0;
+comparison_eta = 0;
+comparison_a = 1;
 random_X = 0;             %For randomly generated X
 normalrandom_X = 0;       %For normal random X
-graph_2d_bool = 1;
+graph_2d_bool = 0;
 graph_2d_conv = 0;
 graph_3d_conv = 0;       %Boolean values for 2D and 3D graphs
 graph_3d_bool = 0;
@@ -28,12 +31,11 @@ f1_score_bool=1;%gives the f1 score
 classification_rate_array=[purity_checking_bool f1_score_bool];%this stores which error rates to print
 mean_m = 3;
 std_dev_m = 0.9;          %mean and std deviation for fuzzifier m
-mean_eta = 5.4;
+mean_eta = 3.4;
 std_dev_eta = 1;      %mean and std deviation for eta
 alpha = 0.1:0.2:0.9;    %alpha values
 m_array = 1:1:15;        %range of fuzzifier values
 eta_array = 1:1:15;    %range of eta values
-
 
 if random_X
     c = 3;              %number of clusters
@@ -51,11 +53,11 @@ end
 
 if labelled_dataset
 %     [X,y]=get_data_iris('iris-dataset.txt',',',5);
-%       [X y]=get_text_data('breastCancer.txt',9);%getting data from breast cancer dataset
-    [X y]=get_text_data('Bridge.txt',3);%getting data for bridge data dataset
+      [X y]=get_text_data('breastCancer.txt',9);%getting data from breast cancer dataset
+%     [X y]=get_text_data('Bridge.txt',3);%getting data for bridge data dataset
     c = size(unique(y),1);
     d = size(X,2);
-    n = size(X,1);    
+    n = size(X,1);
 end
 
 if run_pfcm_generaltype2
@@ -119,6 +121,119 @@ if run_pfcm_type1
 %     graph_2d(X,V,U,'r');
 end
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%VARYING ETA%%%%%%%%%%%%%%%%%%%%%%%%%
+
+if comparison_eta && labelled_dataset  
+    error_t1 = [];
+    error_it2 = [];
+    error_gt2 = [];
+    k=1; 
+    eta_value = 3:3:30;
+    for eta_comp = eta_value
+        [V_t1_comp U_t1_comp T_t1_comp] = get_final_values_pfcm_type1(X,c,n,d,m,eta_comp,a,b,gamma,epsilon,max_iter,V);
+        [error_t1(k) precision_t1 recall_t1 F1_score_t1] = classification_rate(X,V_t1_comp,U_t1_comp,y,classification_rate_array);        
+        hold on;
+        scatter(eta_comp,error_t1(k),'filled','g');     
+        k = k+1;
+    end
+    
+    eta_mean = 3:3:30;
+    k = 1;
+    for eta_comp = eta_mean
+        [V_it2_comp U_it2_comp T_it2_comp] = get_final_values_pfcm_intervaltype2(X,c,n,d,m1,m2,eta_comp-1,eta_comp+1,a,b,gamma,epsilon,max_iter,V);  
+        [error_it2(k) precision_it2 recall_it2 F1_score_it2] = classification_rate(X,V_it2_comp,U_it2_comp,y,classification_rate_array);
+        [V_gt2_comp U_gt2_comp T_gt2_comp] = get_final_values_pfcm_generaltype2(X,c,n,d,alpha,m_array,mean_m,std_dev_m,eta_array,eta_comp,std_dev_eta,a,b,gamma,epsilon,max_iter,V); 
+        [error_gt2(k) precision_gt2 recall_gt2 F1_score_gt2] = classification_rate(X,V_gt2_comp,U_gt2_comp,y,classification_rate_array);
+        hold on;
+        scatter(eta_comp,error_it2(k),'filled','r');
+        scatter(eta_comp,error_gt2(k),'filled','b');
+        k = k+1;
+    end
+    
+    xlabel('Eta');
+    ylabel('Error Rate');
+    p_t1 = plot(eta_value,error_t1,'g');
+    p_it2 = plot(eta_value,error_it2,'r');
+    p_gt2 = plot(eta_value,error_gt2,'b');
+    lgd = legend([p_t1 p_it2 p_gt2],'Type 1','Interval Type-2','General Type-2');
+    lgd.FontSize = 12;
+end
+%%%%%%%%%%%%%%%%%%%%%%%%%%VARYING ETA%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%VARYING M%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+if comparison_m && labelled_dataset  
+    error_t1 = [];
+    error_it2 = [];
+    error_gt2 = [];
+    k=1; 
+    m_value = 3:3:30;
+    figure;
+    for m_comp = m_value
+        [V_t1_comp U_t1_comp T_t1_comp] = get_final_values_pfcm_type1(X,c,n,d,m_comp,eta,a,b,gamma,epsilon,max_iter,V);
+        [error_t1(k) precision_t1 recall_t1 F1_score_t1] = classification_rate(X,V_t1_comp,U_t1_comp,y,classification_rate_array);        
+        hold on;
+        scatter(m_comp,error_t1(k),'filled','g');     
+        k = k+1;
+    end
+    
+    m_mean = 3:3:30;
+    k = 1;
+    for m_comp = m_mean
+        [V_it2_comp U_it2_comp T_it2_comp] = get_final_values_pfcm_intervaltype2(X,c,n,d,m_comp-1,m_comp+1,eta1,eta2,a,b,gamma,epsilon,max_iter,V);  
+        [error_it2(k) precision_it2 recall_it2 F1_score_it2] = classification_rate(X,V_it2_comp,U_it2_comp,y,classification_rate_array);
+        [V_gt2_comp U_gt2_comp T_gt2_comp] = get_final_values_pfcm_generaltype2(X,c,n,d,alpha,m_array,m_comp,std_dev_m,eta_array,mean_eta,std_dev_eta,a,b,gamma,epsilon,max_iter,V); 
+        [error_gt2(k) precision_gt2 recall_gt2 F1_score_gt2] = classification_rate(X,V_gt2_comp,U_gt2_comp,y,classification_rate_array);
+        hold on;
+        scatter(m_comp,error_it2(k),'filled','r');
+        scatter(m_comp,error_gt2(k),'filled','b');
+        k = k+1;
+    end
+    ylim([0 100]);
+    xlabel('Fuzzifier m');
+    ylabel('Error Rate');
+    p_t1 = plot(m_value,error_t1,'g');
+    p_it2 = plot(m_value,error_it2,'r');
+    p_gt2 = plot(m_value,error_gt2,'b');
+    lgd = legend([p_t1 p_it2 p_gt2],'Type 1','Interval Type-2','General Type-2');
+    lgd.FontSize = 12;
+end
+
+%%%%%%%%%%%%%%%%%%VARYING M%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%VARYING A%%%%%%%%%%%%%%%%%%%%%%%%%
+if comparison_a && labelled_dataset  
+    error_t1 = [];
+    error_it2 = [];
+    error_gt2 = [];
+    k=1; 
+    a_value = 1:3:30;
+    figure;
+    for a_comp = a_value
+        [V_t1_comp U_t1_comp T_t1_comp] = get_final_values_pfcm_type1(X,c,n,d,m,eta,a_comp,b,gamma,epsilon,max_iter,V);
+        [error_t1(k) precision_t1 recall_t1 F1_score_t1] = classification_rate(X,V_t1_comp,U_t1_comp,y,classification_rate_array);     
+        [V_it2_comp U_it2_comp T_it2_comp] = get_final_values_pfcm_intervaltype2(X,c,n,d,m1,m2,eta1,eta2,a_comp,b,gamma,epsilon,max_iter,V);  
+        [error_it2(k) precision_it2 recall_it2 F1_score_it2] = classification_rate(X,V_it2_comp,U_it2_comp,y,classification_rate_array);
+        [V_gt2_comp U_gt2_comp T_gt2_comp] = get_final_values_pfcm_generaltype2(X,c,n,d,alpha,m_array,mean_m,std_dev_m,eta_array,mean_eta,std_dev_eta,a_comp,b,gamma,epsilon,max_iter,V); 
+        [error_gt2(k) precision_gt2 recall_gt2 F1_score_gt2] = classification_rate(X,V_gt2_comp,U_gt2_comp,y,classification_rate_array);
+        hold on;
+        scatter(a_comp,error_t1(k),'filled','g');     
+        scatter(a_comp,error_it2(k),'filled','r');
+        scatter(a_comp,error_gt2(k),'filled','b');
+        k = k+1;
+    end
+    
+%     ylim([0 100]);
+    xlabel('a');
+    ylabel('Error Rate');
+    p_t1 = plot(a_value,error_t1,'g');
+    p_it2 = plot(a_value,error_it2,'r');
+    p_gt2 = plot(a_value,error_gt2,'b');
+    lgd = legend([p_t1 p_it2 p_gt2],'Type 1','Interval Type-2','General Type-2');
+    lgd.FontSize = 12;
+end
+
+
+%%%%%%%%%%%%%%%%%VARYING A %%%%%%%%%%%%%%%%%%%%%%%%%
 % graph_2d(X,V,U,'r');
 
 % function graph_2d(X,V,U)
@@ -328,7 +443,6 @@ function Y=gaussian(X,variance,mean,graph_bool)
     end
 end
 
-
 function [U_left ,U_right]=get_leftright_fuzzified(U1,U2,m1,m2) %W1_all takes the value for U_L and W2_all takes the values for U_R
     u1 = U1.^m1;
     u2 = U2.^m2;
@@ -436,6 +550,44 @@ function [X Y]=get_text_data(filename,y_column)
     data=importdata(filename);
     Y=data(:,y_column);
     X=data(:,1:(y_column-1));
+end
+
+function [X all_indices]=get_image_data_v3(filename,interval,c,noppr);
+    I=imread(strcat(filename,'.jpg'));
+    if size(I,3)==3
+        I=rgb2gray(I);
+    end
+    I=double(I);
+    X=[];
+    I1=double(imread(strcat(filename,'_gauss.jpg')));%gaussian blur
+    I2=double(imread(strcat(filename,'_med.jpg')));%median filtering
+    I3=double(imread(strcat(filename,'_entro.jpg')));%entropy
+    I1=(I1-min(min(I1)))/(max(max(I1))-min(min(I1)));
+    I2=(I2-min(min(I2)))/(max(max(I2))-min(min(I2)));
+    I3=(I3-min(min(I3)))/(max(max(I3))-min(min(I3)));
+    I_mask=double(imread(strcat(filename,'_mask.jpg')));
+    I_mask(find(100>I_mask))=0;
+    I_mask(find(I_mask>200))=1;
+    I_mask(find(((200>=I_mask).*I_mask)>=100))=0.5;
+    all_indices=[];
+    for unique_pixel=unique(I_mask)'
+        X_temp=[];
+        indices=find(I_mask==unique_pixel);
+        indices_2=ceil(rand(1,noppr)*size(indices,1));
+        indices_2=indices(indices_2);
+        all_indices=[all_indices; indices_2];
+        X_temp=[X_temp I1(indices_2)]    ;
+        X_temp=[X_temp I2(indices_2)]    ;
+        X_temp=[X_temp I3(indices_2)]    ;
+        X=[X ;X_temp];
+    end 
+    X=importdata(strcat(filename,'_X.txt'));
+    all_indices=importdata(strcat(filename,'_indices.txt'));
+    
+%     X_norm=(X-min(X))./(max(X)-min(X));
+%     X=X_norm;
+%     scatter3(X_norm(:,1),X_norm(:,2),X_norm(:,3) )
+   
 end
 
 function [error precision recall f1_score] = classification_rate(X,V,U,y,classification_rate_array)
@@ -548,16 +700,3 @@ function m_list=alpha_cut(m_array,U,standard_deviation,mean,alpha,graph_bool)%re
     m_list=[X_left fliplr(X_right)] ;%m_list is 1*(2*(number of alpha cuts)) vectors in ascending order of m
 end
 
-function [X Y]=get_data_iris(filename,delimiter,y_column)%gettomg data from a file separated with a delimiter named filename and the labels are in y_columbn
-    data=split(importdata(filename),delimiter);
-    X=str2double(data(:,1:(y_column-1)));
-    y=double(char(data(:,y_column)));
-    Y=[];
-    u_rows=unique(y,'rows') ;%unique rows
-    u_rows_iterator=0;%unique rows iterator
-    for rows=u_rows' 
-        u_rows_iterator=u_rows_iterator+1;
-        equivalence_matrix=sum((y==rows')')';
-        Y=[Y;repmat(u_rows_iterator,sum(equivalence_matrix==max(equivalence_matrix )),1)];
-    end  
-end
