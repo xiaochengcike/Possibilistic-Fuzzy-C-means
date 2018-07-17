@@ -2,25 +2,26 @@
 % n = 100;            %number of points
 % d = 2;              %number of dimensions
 % X = rand(n,d);     
-a = 1;              %user defined const a in objective function
-b = 5;             %user defined const b in objective function
-m = 2;              %fuzzifier only for type 1  
-eta = 2;            %pcm uncertainty parameter for type 1
+a = 10;              %user defined const a in objective function
+b = 1;             %user defined const b in objective function
+m = 5;              %fuzzifier only for type 1  
+eta = 3;            %pcm uncertainty parameter for type 1
 epsilon = 10^(-4); %error threshold
 max_iter = 1000;   %max number of iterations before exit
 eta1 = 2;
-eta2 = 5;          %UNCERTAINTY PARAMETERS FOR IT2 PFCM [m1,m2] & [eta1, eta2]
+eta2 = 3;          %UNCERTAINTY PARAMETERS FOR IT2 PFCM [m1,m2] & [eta1, eta2]
 m1 = 2;
-m2 = 4;
-run_pfcm_type1 = 1;     %Boolean for PFCM Type-1
+m2 = 3;
+run_pfcm_type1 = 0;     %Boolean for PFCM Type-1
 run_pfcm_intervaltype2 = 0;     %Boolean for PFCM Type-2
 run_pfcm_generaltype2 = 0;   %Boolean for GT2 PFCM
-labelled_dataset = 1;     %For datasets such as Iris, Breast Cancer etc
+labelled_dataset = 0;     %For datasets such as Iris, Breast Cancer etc
+image_seg = 1;
 unlabelled_dataset = 0;   %For datasets such as Squares3Clust
 comparison_m = 0;         %Boolean for checking robustess w.r.t m
 comparison_eta = 0;       %Boolean for checking robustness w.r.t eta
 comparison_a = 0;         %Boolean for checking robustness w.r.t a
-comparison_b = 1;         %Boolean for checking robustness w.r.t b  
+comparison_b = 0;         %Boolean for checking robustness w.r.t b  
 random_X = 0;             %For randomly generated X
 normalrandom_X = 0;       %For normal random X
 graph_2d_bool = 0;
@@ -30,13 +31,38 @@ graph_3d_bool = 0;
 purity_checking_bool=1;%gives the purity checking error rate
 f1_score_bool=1;%gives the f1 score
 classification_rate_array=[purity_checking_bool f1_score_bool];%this stores which error rates to print
-mean_m = 3;
-std_dev_m = 0.9;          %mean and std deviation for fuzzifier m
+mean_m = 16;
+std_dev_m = 4;          %mean and std deviation for fuzzifier m
 mean_eta = 3.4;
-std_dev_eta = 1;      %mean and std deviation for eta
+std_dev_eta = 0.7;      %mean and std deviation for eta
 alpha = 0.1:0.2:0.9;    %alpha values
 m_array = 1:1:15;        %range of fuzzifier values
 eta_array = 1:1:15;    %range of eta values
+
+interval = 3;
+filename = 's6';
+c = 3;
+noppr = 700;
+graph_bool_21 = 0; %used for rgb segmentation
+K_nearest_neighbor = 5;
+
+if filename(2)=='5'%5 represents that it is a porsche car;
+    graph_bool_21=2;
+elseif filename(2)=='6'
+    graph_bool_21=2;%tells that image is wolf
+end
+
+if image_seg
+     indices=0;
+     [X indices]=get_image_data_v3(filename,interval,c,noppr,graph_bool_21);
+    Y=[1:1:c]';
+    [V_init U] = get_final_values_fcm(X,c,size(X,1),size(X,2),m,epsilon,max_iter); 
+    gamma = calculate_gamma(X,V_init,U,c,size(X,1),m);
+    [V_gt2 U_gt2 T_gt2] = get_final_values_pfcm_generaltype2(X,c,size(X,1),size(X,2),alpha,m_array, mean_m,std_dev_m,eta_array,mean_eta,std_dev_eta,a,b,gamma,epsilon,max_iter,V_init);
+%     [V_it2 U_it2 T_it2] = get_final_values_pfcm_intervaltype2(X,c,size(X,1),size(X,2),m1,m2,eta1,eta2,a,b,gamma,epsilon,max_iter,V_init);    
+%     [V_t1 U_t1 T_t1] = get_final_values_pfcm_type1(X,c,size(X,1),size(X,2),m,eta,a,b,gamma,epsilon,max_iter,V_init);    
+    img_error= show_image_v3(X,U_gt2,filename,interval,1,size(V_gt2,1),indices,K_nearest_neighbor,graph_bool_21,noppr);
+end
 
 if random_X
     c = 3;              %number of clusters
@@ -54,17 +80,32 @@ end
 
 if labelled_dataset
 %     [X,y]=get_data_iris('iris-dataset.txt',',',5);
-      [X y]=get_text_data('breastCancer.txt',9);%getting data from breast cancer dataset
+%       [X y]=get_text_data('breastCancer.txt',9);%getting data from breast cancer dataset
 %     [X y]=get_text_data('Bridge.txt',3);%getting data for bridge data dataset
+    [X y]=get_wine_data('Wine-Dataset.txt',1);%getting data for bridge data dataset
     c = size(unique(y),1);
     d = size(X,2);
     n = size(X,1);
 end
 
 if run_pfcm_generaltype2
-    [V_init U] = get_final_values_fcm(X,c,n,d,m,epsilon,max_iter);
+    [V_init U] = get_final_values_fcm(X,c,n,d,m,epsilon,max_iter); 
     gamma = calculate_gamma(X,V_init,U,c,n,m);
-    [V_gt2 U_gt2 T_gt2] = get_final_values_pfcm_generaltype2(X,c,n,d,alpha,m_array, mean_m,std_dev_m,eta_array,mean_eta,std_dev_eta,a,b,gamma,epsilon,max_iter,V_init);
+%     min_error = 100;
+%     for mean_loop = mean_m
+%         for std_dev_loop = std_dev_m
+            [V_gt2 U_gt2 T_gt2] = get_final_values_pfcm_generaltype2(X,c,n,d,alpha,m_array, mean_m,std_dev_m,eta_array,mean_eta,std_dev_eta,a,b,gamma,epsilon,max_iter,V_init);
+%             [error_loop confusion_matrix_loop] = classification_rate(X,V_gt2,U_gt2,y,classification_rate_array);
+%             if min_error > error_loop
+%                 min_error = error_loop;
+%                 V_min_gt2 = V_gt2;
+%                 U_min_gt2 = U_gt2;
+%                 min_confusion_matrix = confusion_matrix_loop; 
+%             end
+%         end
+%     end
+%     min_error
+%     min_confusion_matrix
     if graph_2d_bool
         figure;
 %        graph_2d(X,V_gt2,U_gt2);
@@ -132,7 +173,7 @@ if comparison_eta && labelled_dataset
     eta_value = 3:3:30;
     for eta_comp = eta_value
         [V_t1_comp U_t1_comp T_t1_comp] = get_final_values_pfcm_type1(X,c,n,d,m,eta_comp,a,b,gamma,epsilon,max_iter,V);
-        [error_t1(k) precision_t1 recall_t1 F1_score_t1] = classification_rate(X,V_t1_comp,U_t1_comp,y,classification_rate_array);        
+        [error_t1(k) confusion_t1] = classification_rate(X,V_t1_comp,U_t1_comp,y,classification_rate_array);        
         hold on;
         scatter(eta_comp,error_t1(k),'filled','g');     
         k = k+1;
@@ -142,9 +183,9 @@ if comparison_eta && labelled_dataset
     k = 1;
     for eta_comp = eta_mean
         [V_it2_comp U_it2_comp T_it2_comp] = get_final_values_pfcm_intervaltype2(X,c,n,d,m1,m2,eta_comp-1,eta_comp+1,a,b,gamma,epsilon,max_iter,V);  
-        [error_it2(k) precision_it2 recall_it2 F1_score_it2] = classification_rate(X,V_it2_comp,U_it2_comp,y,classification_rate_array);
+        [error_it2(k) confusion_it2] = classification_rate(X,V_it2_comp,U_it2_comp,y,classification_rate_array);
         [V_gt2_comp U_gt2_comp T_gt2_comp] = get_final_values_pfcm_generaltype2(X,c,n,d,alpha,m_array,mean_m,std_dev_m,eta_array,eta_comp,std_dev_eta,a,b,gamma,epsilon,max_iter,V); 
-        [error_gt2(k) precision_gt2 recall_gt2 F1_score_gt2] = classification_rate(X,V_gt2_comp,U_gt2_comp,y,classification_rate_array);
+        [error_gt2(k) confusion_gt2] = classification_rate(X,V_gt2_comp,U_gt2_comp,y,classification_rate_array);
         hold on;
         scatter(eta_comp,error_it2(k),'filled','r');
         scatter(eta_comp,error_gt2(k),'filled','b');
@@ -171,7 +212,7 @@ if comparison_m && labelled_dataset
     figure;
     for m_comp = m_value
         [V_t1_comp U_t1_comp T_t1_comp] = get_final_values_pfcm_type1(X,c,n,d,m_comp,eta,a,b,gamma,epsilon,max_iter,V);
-        [error_t1(k) precision_t1 recall_t1 F1_score_t1] = classification_rate(X,V_t1_comp,U_t1_comp,y,classification_rate_array);        
+        [error_t1(k) confusion_t1] = classification_rate(X,V_t1_comp,U_t1_comp,y,classification_rate_array);        
         hold on;
         scatter(m_comp,error_t1(k),'filled','g');     
         k = k+1;
@@ -181,9 +222,9 @@ if comparison_m && labelled_dataset
     k = 1;
     for m_comp = m_mean
         [V_it2_comp U_it2_comp T_it2_comp] = get_final_values_pfcm_intervaltype2(X,c,n,d,m_comp-1,m_comp+1,eta1,eta2,a,b,gamma,epsilon,max_iter,V);  
-        [error_it2(k) precision_it2 recall_it2 F1_score_it2] = classification_rate(X,V_it2_comp,U_it2_comp,y,classification_rate_array);
+        [error_it2(k) confusion_it2] = classification_rate(X,V_it2_comp,U_it2_comp,y,classification_rate_array);
         [V_gt2_comp U_gt2_comp T_gt2_comp] = get_final_values_pfcm_generaltype2(X,c,n,d,alpha,m_array,m_comp,std_dev_m,eta_array,mean_eta,std_dev_eta,a,b,gamma,epsilon,max_iter,V); 
-        [error_gt2(k) precision_gt2 recall_gt2 F1_score_gt2] = classification_rate(X,V_gt2_comp,U_gt2_comp,y,classification_rate_array);
+        [error_gt2(k) confusion_gt2] = classification_rate(X,V_gt2_comp,U_gt2_comp,y,classification_rate_array);
         hold on;
         scatter(m_comp,error_it2(k),'filled','r');
         scatter(m_comp,error_gt2(k),'filled','b');
@@ -211,11 +252,11 @@ if comparison_a && labelled_dataset
     figure;
     for a_comp = a_value
         [V_t1_comp U_t1_comp T_t1_comp] = get_final_values_pfcm_type1(X,c,n,d,m,eta,a_comp,b,gamma,epsilon,max_iter,V);
-        [error_t1(k) precision_t1 recall_t1 F1_score_t1] = classification_rate(X,V_t1_comp,U_t1_comp,y,classification_rate_array);     
+        [error_t1(k) confusion_t1] = classification_rate(X,V_t1_comp,U_t1_comp,y,classification_rate_array);     
         [V_it2_comp U_it2_comp T_it2_comp] = get_final_values_pfcm_intervaltype2(X,c,n,d,m1,m2,eta1,eta2,a_comp,b,gamma,epsilon,max_iter,V);  
-        [error_it2(k) precision_it2 recall_it2 F1_score_it2] = classification_rate(X,V_it2_comp,U_it2_comp,y,classification_rate_array);
+        [error_it2(k) confusion_it2] = classification_rate(X,V_it2_comp,U_it2_comp,y,classification_rate_array);
         [V_gt2_comp U_gt2_comp T_gt2_comp] = get_final_values_pfcm_generaltype2(X,c,n,d,alpha,m_array,mean_m,std_dev_m,eta_array,mean_eta,std_dev_eta,a_comp,b,gamma,epsilon,max_iter,V); 
-        [error_gt2(k) precision_gt2 recall_gt2 F1_score_gt2] = classification_rate(X,V_gt2_comp,U_gt2_comp,y,classification_rate_array);
+        [error_gt2(k) confusion_gt2] = classification_rate(X,V_gt2_comp,U_gt2_comp,y,classification_rate_array);
         hold on;
         scatter(a_comp,error_t1(k),'filled','g');     
         scatter(a_comp,error_it2(k),'filled','r');
@@ -223,7 +264,7 @@ if comparison_a && labelled_dataset
         k = k+1;
     end
     
-    ylim([0 10]);
+    ylim([0 20]);
     xlabel('a');
     ylabel('Error Rate');
     p_t1 = plot(a_value,error_t1,'g');
@@ -246,15 +287,15 @@ if comparison_b && labelled_dataset
     figure;
     for b_comp = b_value
         [V_t1_comp U_t1_comp T_t1_comp] = get_final_values_pfcm_type1(X,c,n,d,m,eta,a,b_comp,gamma,epsilon,max_iter,V);
-        [error_t1(k) precision_t1 recall_t1 F1_score_t1] = classification_rate(X,V_t1_comp,U_t1_comp,y,classification_rate_array);     
+        [error_t1(k) confusion_t1] = classification_rate(X,V_t1_comp,U_t1_comp,y,classification_rate_array);     
         [V_it2_comp U_it2_comp T_it2_comp] = get_final_values_pfcm_intervaltype2(X,c,n,d,m1,m2,eta1,eta2,a,b_comp,gamma,epsilon,max_iter,V);  
-        [error_it2(k) precision_it2 recall_it2 F1_score_it2] = classification_rate(X,V_it2_comp,U_it2_comp,y,classification_rate_array);
-        [V_gt2_comp U_gt2_comp T_gt2_comp] = get_final_values_pfcm_generaltype2(X,c,n,d,alpha,m_array,mean_m,std_dev_m,eta_array,mean_eta,std_dev_eta,a,b_comp,gamma,epsilon,max_iter,V); 
-        [error_gt2(k) precision_gt2 recall_gt2 F1_score_gt2] = classification_rate(X,V_gt2_comp,U_gt2_comp,y,classification_rate_array);
+        [error_it2(k) confusion_it2] = classification_rate(X,V_it2_comp,U_it2_comp,y,classification_rate_array);
+%         [V_gt2_comp U_gt2_comp T_gt2_comp] = get_final_values_pfcm_generaltype2(X,c,n,d,alpha,m_array,mean_m,std_dev_m,eta_array,mean_eta,std_dev_eta,a,b_comp,gamma,epsilon,max_iter,V); 
+%         [error_gt2(k) confusion_gt2] = classification_rate(X,V_gt2_comp,U_gt2_comp,y,classification_rate_array);
         hold on;
         scatter(b_comp,error_t1(k),'filled','g');     
         scatter(b_comp,error_it2(k),'filled','r');
-        scatter(b_comp,error_gt2(k),'filled','b');
+%         scatter(b_comp,error_gt2(k),'filled','b');
         k = k+1;
     end
     
@@ -263,9 +304,9 @@ if comparison_b && labelled_dataset
     ylabel('Error Rate');
     p_t1 = plot(b_value,error_t1,'g');
     p_it2 = plot(b_value,error_it2,'r');
-    p_gt2 = plot(b_value,error_gt2,'b');
-    lgd = legend([p_t1 p_it2 p_gt2],'Type 1','Interval Type-2','General Type-2');
-    lgd.FontSize = 12;
+%     p_gt2 = plot(b_value,error_gt2,'b');
+%     lgd = legend([p_t1 p_it2 p_gt2],'Type 1','Interval Type-2','General Type-2');
+%     lgd.FontSize = 12;
 end
 
 
@@ -381,8 +422,9 @@ function gamma = calculate_gamma(X,V,U,c,n,m)      %function to calculate cx1 ga
 end
 
 function [V U T] = get_final_values_pfcm_type1(X,c,n,d,m,eta,a,b,gamma,epsilon,max_iter,V_init)
-    V_old = V_init;
-%     V_old = rand(c,d);
+%     V_old = V_init;
+    V_old = rand(c,d);
+    V_saved_type1 = V_old;
     V = zeros(c,d);
     U = zeros(c,d);
     err = 10000;
@@ -401,6 +443,10 @@ end
 
 function [V U T] = get_final_values_pfcm_intervaltype2(X,c,n,d,m1,m2,eta1,eta2,a,b,gamma,epsilon,max_iter,V_init)
     V_old = V_init;
+%     V_old = rand(c,d);
+%     V_old = [0.8236 0.6660 0.7027 0.5409; 0.1750 0.8944 0.1536 0.6797;
+%     0.1636 0.5166 0.9535 0.0366];%for iris dataset
+    V_saved_intervaltype2 = V_old;
     V = zeros(c,d);
     U = zeros(c,d);
     err = 10000;
@@ -520,6 +566,20 @@ function V = cluster_update(X,a,b,U,T,m,eta,c,n,d)   %X is nxd matrix
     V = V./sum(a.*new_U + b.*new_T,2);  
 end
 
+function [X Y]=get_data_iris(filename,delimiter,y_column)%gettomg data from a file separated with a delimiter named filename and the labels are in y_columbn
+    data=split(importdata(filename),delimiter);
+    X=str2double(data(:,1:(y_column-1)));
+    y=double(char(data(:,y_column)));
+    Y=[];
+    u_rows=unique(y,'rows') ;%unique rows
+    u_rows_iterator=0;%unique rows iterator
+    for rows=u_rows' 
+        u_rows_iterator=u_rows_iterator+1;
+        equivalence_matrix=sum((y==rows')')';
+        Y=[Y;repmat(u_rows_iterator,sum(equivalence_matrix==max(equivalence_matrix )),1)];
+    end  
+end
+
 function y_all = eiascc(X, U_L, U_R, T_L, T_R, n, c, d, acons, bcons) %y_all is cxd matrix containing cluster centers
     y_all = zeros(c,d);
     for dim = 1:d
@@ -588,45 +648,13 @@ function [X Y]=get_text_data(filename,y_column)
     X=data(:,1:(y_column-1));
 end
 
-function [X all_indices]=get_image_data_v3(filename,interval,c,noppr);
-    I=imread(strcat(filename,'.jpg'));
-    if size(I,3)==3
-        I=rgb2gray(I);
-    end
-    I=double(I);
-    X=[];
-    I1=double(imread(strcat(filename,'_gauss.jpg')));%gaussian blur
-    I2=double(imread(strcat(filename,'_med.jpg')));%median filtering
-    I3=double(imread(strcat(filename,'_entro.jpg')));%entropy
-    I1=(I1-min(min(I1)))/(max(max(I1))-min(min(I1)));
-    I2=(I2-min(min(I2)))/(max(max(I2))-min(min(I2)));
-    I3=(I3-min(min(I3)))/(max(max(I3))-min(min(I3)));
-    I_mask=double(imread(strcat(filename,'_mask.jpg')));
-    I_mask(find(100>I_mask))=0;
-    I_mask(find(I_mask>200))=1;
-    I_mask(find(((200>=I_mask).*I_mask)>=100))=0.5;
-    all_indices=[];
-    for unique_pixel=unique(I_mask)'
-        X_temp=[];
-        indices=find(I_mask==unique_pixel);
-        indices_2=ceil(rand(1,noppr)*size(indices,1));
-        indices_2=indices(indices_2);
-        all_indices=[all_indices; indices_2];
-        X_temp=[X_temp I1(indices_2)]    ;
-        X_temp=[X_temp I2(indices_2)]    ;
-        X_temp=[X_temp I3(indices_2)]    ;
-        X=[X ;X_temp];
-    end 
-    X=importdata(strcat(filename,'_X.txt'));
-    all_indices=importdata(strcat(filename,'_indices.txt'));
-    
-%     X_norm=(X-min(X))./(max(X)-min(X));
-%     X=X_norm;
-%     scatter3(X_norm(:,1),X_norm(:,2),X_norm(:,3) )
-   
+function [X Y]=get_wine_data(filename,y_column)
+    data=importdata(filename);
+    Y=data(:,1);
+    X=data(:,2:end);
 end
 
-function [error precision recall f1_score] = classification_rate(X,V,U,y,classification_rate_array)
+function [error confusion_matrix] = classification_rate(X,V,U,y,classification_rate_array)
     y_temp=[];
     y_count=0;
     binary_classification=0;
@@ -734,5 +762,267 @@ function m_list=alpha_cut(m_array,U,standard_deviation,mean,alpha,graph_bool)%re
         hold off
     end
     m_list=[X_left fliplr(X_right)] ;%m_list is 1*(2*(number of alpha cuts)) vectors in ascending order of m
+end
+
+function error_rate=show_image_v3(X,U,filename,interval,base_index,c,indices,K_nearest_neighbor,graph_bool_21,noppr)
+    color=max((max(U)==U).*linspace(0,1,size(U,1))')'   ;
+    color=color*255; 
+    orig_all_indices=indices;
+    error_rate=-1;%-1 indicates that error rate is not applicable here
+    if graph_bool_21==1
+        image_seg_scatter_plot(X,color,base_index+2);
+        I=imread(strcat(filename,'.jpg'));
+        X_whole=uint8(create_image_knn(X,color,indices,I,K_nearest_neighbor));
+        figure(base_index);
+        imshow(X_whole);
+        return;
+    end
+%     noppr=graph_bool(20)
+    I_mask=imread(strcat(filename,'_mask.jpg'));    
+    if size(I_mask,3)==3
+        I_mask=rgb2gray(I_mask);
+    end
+    I_mask=double(I_mask);
+    if filename(2)=='5'
+        I_mask(find(65>I_mask))=0;
+        I_mask(find(I_mask>195))=1;
+        I_mask(find(((195>=I_mask).*I_mask)>=130))=0.5;
+        I_mask(find(((130>=I_mask).*I_mask)>=65))=0.25;
+    else
+        I_mask(find(100>I_mask))=0;
+        I_mask(find(I_mask>200))=1;
+        I_mask(find(((200>=I_mask).*I_mask)>=100))=0.5;
+    end
+    I_mask=uint8(I_mask*255); 
+    max_classifications=0;
+    unique_color_all=unique(color);
+    negative_indices=0;
+    while size(unique_color_all)<c
+        negative_indices=negative_indices-1;
+        unique_color_all=[unique_color_all; negative_indices];
+    end
+    for unique_color=perms(unique_color_all)'
+        correct_classifications=0;
+        unique_color_index=0;
+        for color_index=1:noppr:size(color)
+            unique_color_index=unique_color_index+1
+            correct_classifications=correct_classifications+sum(color(color_index:color_index+noppr-1)==unique_color(unique_color_index));
+        end
+%         correct_classifications=sum(color(1:100)==unique_color(1))+sum(color(101:200)==unique_color(2));%+sum(color(201:300)==unique_color(3));
+        if max_classifications<correct_classifications
+            max_classifications=correct_classifications;
+            correct_colors=unique_color;
+        end
+    end
+    
+    
+    
+    error_rate=(1-max_classifications/size(color,1))*100
+    
+    confusion_matrix=zeros(size(correct_colors,1),size(correct_colors,1));
+    
+    for row_index=1:size(confusion_matrix,1)
+        color_index=1;
+        for column_index=1:size(confusion_matrix,2)
+            confusion_matrix(row_index,column_index)=sum(color(color_index:color_index+noppr-1)==correct_colors(row_index));
+            color_index=color_index+noppr;
+        end
+    end
+    confusion_matrix
+
+    X_whole=uint8(create_image_knn(X,color,indices,I_mask,K_nearest_neighbor));
+
+      
+    indices_list=cell(size(unique_color_all));
+    unique_color=unique(X_whole)';
+    for unique_color_index=1:size(unique_color,2)
+        indices=find(X_whole==unique_color(unique_color_index));
+        indices_list(unique_color_index)={indices};
+    end
+    max_classifications=0;
+    confusion_matrix_2=zeros(size(correct_colors,1),size(correct_colors,1));
+    if size(unique_color_all,1)==2%This is only for special case for scene 3  not the generalized one because scene 3 mask does not have white color in it
+        unique_color_all(2)=128;
+    end
+    for unique_color=perms(uint8(unique_color_all))'
+        correct_classifications=0;
+        for unique_color_index=1:size(unique_color,1)
+            X_whole(cell2mat(indices_list(unique_color_index)))=unique_color(unique_color_index);
+        end
+        correct_classifications=sum(sum(X_whole==I_mask));
+        if max_classifications<correct_classifications
+            max_classifications=correct_classifications;
+            X_temp_whole=X_whole;
+            color_map=unique_color;
+        end
+    end
+    X_whole=X_temp_whole;
+    error_rate_whole=(1-max_classifications/(size(I_mask,1)*size(I_mask,2)))*100
+    
+       unique_color=unique(X_whole);
+      for row_index=1:size(confusion_matrix,1)
+          for column_index=1:size(confusion_matrix,2)
+              confusion_matrix_2(row_index,column_index)=sum(sum(((X_whole==unique_color(column_index))*2-1)==(I_mask==unique_color(row_index))));             
+          end
+      end
+      confusion_matrix_2
+      figure(base_index);
+      imshow(X_whole);
+    indices_list=cell(size(unique_color_all));
+    unique_color=unique(color)';
+    for unique_color_index=1:size(unique_color,2)
+        indices=find(color==unique_color(unique_color_index));
+        indices_list(unique_color_index)={indices};
+    end
+    max_classifications=0;
+      for unique_color=perms(unique_color_all)'
+         correct_classifications=0;
+         for unique_color_index=1:size(unique_color,1)
+                color(cell2mat(indices_list(unique_color_index)))=unique_color(unique_color_index);
+         end
+         correct_classifications=sum(I_mask(orig_all_indices)==color);
+         if  max_classifications<correct_classifications
+             max_classifications=correct_classifications;
+             color_temp=color;
+         end
+      end
+      max_classifications
+      color=color_temp;
+      image_seg_scatter_plot(X,color,base_index+2)
+end
+
+function image_seg_scatter_plot(X,color,base_index)
+    figure(base_index)
+    X_norm=(X-min(X))./(max(X)-min(X));
+    my_color=['r' 'g' 'b' 'm' 'c' 'w' 'k'];
+    points_type=['o' 'x' 's' '+' 'p' 'h','*'];
+    unique_color=unique(color);
+    for unique_color_index=1:size(unique_color,1)
+        input_indices=find(color==unique_color(unique_color_index));
+        scatter3(X_norm(input_indices,1),X_norm(input_indices,2),X_norm(input_indices,3),100,my_color(unique_color_index),points_type(unique_color_index));
+        hold on
+        unique_color_index=unique_color_index+1;
+    end
+%     scatter3(X_norm(:,1),X_norm(:,2),X_norm(:,3),100,color,'o','filled')
+    
+    plotcube([1 1 1],[0 0 0],0);
+     xlabel("Entropy",'FontSize' , 16,'FontWeight' , 'bold');
+     ylabel({"Median                ","Filtered Intensity"},'FontSize' , 16,'FontWeight' , 'bold');
+     zlabel("Gaussian Blur",'FontSize' , 16,'FontWeight' , 'bold');
+     set(gca, 'FontName', 'Times New Roman','FontSize',16,'FontWeight','Bold',  'LineWidth', 1)
+     
+end
+
+function [X, all_indices]=get_image_data_v3(filename,interval,c,noppr,graph_bool_21);
+    I=imread(strcat(filename,'.jpg'));
+    if size(I,3)==3
+        I=rgb2gray(I);
+    end
+    if graph_bool_21 ==1 
+       all_indices=ceil(rand(1,ceil(size(I,1)*size(I,2)/10))*(size(I,1)*size(I,2)))';
+       I1=imgaussfilt(I,0.5);%standard deviation set to 0.5 gaussian blur
+       I2=medfilt2(I,[3 3]);%m*n box is 3*3; median iltering
+       I3_temp=entropyfilt(I,true((9)));%entropy filtering
+       I3=(I3_temp-min(I3_temp))./(max(I3_temp)-min(I3_temp));
+       X=[I1(all_indices) I2(all_indices) I3(all_indices)];
+       X=double(X);
+        return;
+    elseif graph_bool_21==2
+       
+       X=[];
+       I1=imgaussfilt(I,0.5);%standard deviation set to 0.5 gaussian blur
+       I2=medfilt2(I,[3 3]);%m*n box is 3*3; median iltering
+       I3_temp=entropyfilt(I,true((9)));%entropy filtering
+       I3=(I3_temp-min(I3_temp))./(max(I3_temp)-min(I3_temp));
+       I1=double(I1);
+       I2=double(I2);
+       I3=double(I3);
+    else
+        I=double(I);
+        X=[];
+        I1=double(imread(strcat(filename,'_gauss.jpg')));%gaussian blur
+        I2=double(imread(strcat(filename,'_med.jpg')));%median filtering
+        I3=double(imread(strcat(filename,'_entro.jpg')));%entropy
+        I1=(I1-min(min(I1)))/(max(max(I1))-min(min(I1)));
+        I2=(I2-min(min(I2)))/(max(max(I2))-min(min(I2)));
+        I3=(I3-min(min(I3)))/(max(max(I3))-min(min(I3)));
+    end
+    I_mask=imread(strcat(filename,'_mask.jpg'));    
+    if size(I_mask,3)==3
+        I_mask=rgb2gray(I_mask);
+    end
+    I_mask=double(I_mask);
+ 
+    
+    if filename(2)=='5'
+        I_mask(find(65>I_mask))=0;
+        I_mask(find(I_mask>195))=1;
+        I_mask(find(((195>=I_mask).*I_mask)>=130))=0.5;
+        I_mask(find(((130>=I_mask).*I_mask)>=65))=0.25;
+    else
+        I_mask(100>I_mask)=0;
+        I_mask(find(I_mask>200))=1;
+        I_mask(find(((200>=I_mask).*I_mask)>=100))=0.5;
+    end
+    all_indices=[];
+    for unique_pixel=unique(I_mask)'
+        X_temp=[];
+        indices=find(I_mask==unique_pixel);
+        indices_2=ceil(rand(1,noppr)*size(indices,1));clc
+        indices_2=indices(indices_2);
+        all_indices=[all_indices; indices_2];
+        X_temp=[X_temp I1(indices_2)]    ;
+        X_temp=[X_temp I2(indices_2)]    ;
+        X_temp=[X_temp I3(indices_2)]    ;
+        X=[X ;X_temp];
+    end 
+    if graph_bool_21
+        return;
+    end
+    X=importdata(strcat(filename,'_X.txt'));
+    all_indices=importdata(strcat(filename,'_indices.txt'));
+    
+%     X_norm=(X-min(X))./(max(X)-min(X));
+%     X=X_norm;
+%     scatter3(X_norm(:,1),X_norm(:,2),X_norm(:,3) )
+   
+end
+
+function X_whole=create_image_knn(X,color,indices,I_mask,k)
+X_whole=zeros(size(I_mask,1),size(I_mask,2));    
+column_array=zeros(size(indices,1),1);
+row_array=zeros(size(indices,1),1);
+for index=1:size(indices,1)
+    column_array(index)=floor((indices(index)-0.1)/size(I_mask,1))+1;
+    row_array(index)=indices(index)-(column_array(index)-1)*size(I_mask,1);
+end
+unique_color=unique(color);
+    for row_index=1:size(I_mask,1)
+        fprintf("%d ",row_index);
+        for column_index=1:size(I_mask,2)
+%             min_distance=inf;
+     
+              color_key_list=zeros(size(unique_color));
+%             for index=1:size(indices,1)
+%                 column=floor((indices(index)-0.1)/size(I_mask,1))+1;
+%                 row=indices(index)-(column-1)*size(I_mask,1);
+%                 distance=((row_array(index)-row_index)^2+(column_array(index)-column_index)^2)^0.5;
+                distance_list=((row_array-row_index).^2 +(column_array-column_index).^2).^(0.5);
+%                 distance_list=[distance_list distance];
+%                 if min_distance>distance
+%                     min_distance=distance;
+%                     min_point=index;
+%                 end
+%             end
+%             X_whole(row_index,column_index)=color(min_point);
+            [dummy sorted_indices]=mink(distance_list,k);  
+            for i=1:k
+                color_key_list=color_key_list+(unique_color==color(sorted_indices(i)));
+            end
+            
+            unique_color_index=find(color_key_list==max(color_key_list));
+            X_whole(row_index,column_index)=unique_color(unique_color_index(1));
+        end
+    end    
 end
 

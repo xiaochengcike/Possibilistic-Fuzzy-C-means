@@ -1,0 +1,15 @@
+The results for Type-1 are as follows: purity check error rate=8.6667
+
+confusion_matrix =
+
+    50     0     0
+     0    46     9
+     0     4    41
+
+a = 1;
+b = 5;
+
+eta1 = 2;
+eta2 = 3;          %UNCERTAINTY PARAMETERS FOR IT2 PFCM [m1,m2] & [eta1, eta2]
+m1 = 2.9;
+m2 = 3;

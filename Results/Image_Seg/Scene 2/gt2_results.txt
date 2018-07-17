@@ -1,0 +1,19 @@
+error_rate_whole =
+
+    5.7875
+
+
+confusion_matrix_2 =
+
+       10603         227           0
+         783       18522         546
+         168         591        8560
+
+
+a = 25;              %user defined const a in objective function
+b = 1;             %user defined const b in objective function
+
+mean_m = 16;
+std_dev_m = 5;          %mean and std deviation for fuzzifier m
+mean_eta = 3.4;
+std_dev_eta = 0.7;      %mean and std deviation for eta

@@ -1,0 +1,18 @@
+error_rate_whole =
+
+    7.3050
+
+
+confusion_matrix_2 =
+
+        8065         155           0
+        1270       22870        1306
+           8         183        6143
+
+a = 25;
+b = 1;
+
+mean_m = 16;
+std_dev_m = 5;          %mean and std deviation for fuzzifier m
+mean_eta = 3.4;
+std_dev_eta = 0.7;      %mean and std deviation for eta

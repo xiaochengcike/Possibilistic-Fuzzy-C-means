@@ -1,0 +1,17 @@
+error_rate_whole =
+
+    7.3900
+
+
+confusion_matrix_2 =
+
+       10603         227           0
+         787       18522         542
+         778         622        7919
+
+a = 10;              %user defined const a in objective function
+b = 1;             %user defined const b in objective function
+eta1 = 2;
+eta2 = 3;          %UNCERTAINTY PARAMETERS FOR IT2 PFCM [m1,m2] & [eta1, eta2]
+m1 = 10;
+m2 = 16;
