@@ -2,16 +2,16 @@
 % n = 100;            %number of points
 % d = 2;              %number of dimensions
 % X = rand(n,d);     
-a = 10;              %user defined const a in objective function
+a = 5;              %user defined const a in objective function
 b = 1;             %user defined const b in objective function
-m = 5;              %fuzzifier only for type 1  
-eta = 3;            %pcm uncertainty parameter for type 1
+m = 2;              %fuzzifier only for type 1  
+eta = 7;            %pcm uncertainty parameter for type 1
 epsilon = 10^(-4); %error threshold
 max_iter = 1000;   %max number of iterations before exit
 eta1 = 2;
 eta2 = 3;          %UNCERTAINTY PARAMETERS FOR IT2 PFCM [m1,m2] & [eta1, eta2]
-m1 = 2;
-m2 = 3;
+m1 = 5;
+m2 = 18;
 run_pfcm_type1 = 0;     %Boolean for PFCM Type-1
 run_pfcm_intervaltype2 = 0;     %Boolean for PFCM Type-2
 run_pfcm_generaltype2 = 0;   %Boolean for GT2 PFCM
@@ -31,7 +31,7 @@ graph_3d_bool = 0;
 purity_checking_bool=1;%gives the purity checking error rate
 f1_score_bool=1;%gives the f1 score
 classification_rate_array=[purity_checking_bool f1_score_bool];%this stores which error rates to print
-mean_m = 16;
+mean_m = 12;
 std_dev_m = 4;          %mean and std deviation for fuzzifier m
 mean_eta = 3.4;
 std_dev_eta = 0.7;      %mean and std deviation for eta
@@ -42,7 +42,7 @@ eta_array = 1:1:15;    %range of eta values
 interval = 3;
 filename = 's6';
 c = 3;
-noppr = 700;
+noppr = 1000;
 graph_bool_21 = 0; %used for rgb segmentation
 K_nearest_neighbor = 5;
 
@@ -58,10 +58,10 @@ if image_seg
     Y=[1:1:c]';
     [V_init U] = get_final_values_fcm(X,c,size(X,1),size(X,2),m,epsilon,max_iter); 
     gamma = calculate_gamma(X,V_init,U,c,size(X,1),m);
-    [V_gt2 U_gt2 T_gt2] = get_final_values_pfcm_generaltype2(X,c,size(X,1),size(X,2),alpha,m_array, mean_m,std_dev_m,eta_array,mean_eta,std_dev_eta,a,b,gamma,epsilon,max_iter,V_init);
+%     [V_gt2 U_gt2 T_gt2] = get_final_values_pfcm_generaltype2(X,c,size(X,1),size(X,2),alpha,m_array, mean_m,std_dev_m,eta_array,mean_eta,std_dev_eta,a,b,gamma,epsilon,max_iter,V_init);
 %     [V_it2 U_it2 T_it2] = get_final_values_pfcm_intervaltype2(X,c,size(X,1),size(X,2),m1,m2,eta1,eta2,a,b,gamma,epsilon,max_iter,V_init);    
-%     [V_t1 U_t1 T_t1] = get_final_values_pfcm_type1(X,c,size(X,1),size(X,2),m,eta,a,b,gamma,epsilon,max_iter,V_init);    
-    img_error= show_image_v3(X,U_gt2,filename,interval,1,size(V_gt2,1),indices,K_nearest_neighbor,graph_bool_21,noppr);
+    [V_t1 U_t1 T_t1] = get_final_values_pfcm_type1(X,c,size(X,1),size(X,2),m,eta,a,b,gamma,epsilon,max_iter,V_init);    
+    img_error= show_image_v3(X,U_t1,filename,interval,1,size(V_t1,1),indices,K_nearest_neighbor,graph_bool_21,noppr);
 end
 
 if random_X

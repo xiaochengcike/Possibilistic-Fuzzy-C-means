@@ -1,0 +1,15 @@
+error_rate_whole =
+
+   10.4279
+
+
+confusion_matrix_2 =
+
+       22127        4325         566
+         524       46167         526
+        2785         232        8652
+
+a = 5;              %user defined const a in objective function
+b = 1;             %user defined const b in objective function
+m = 2;              %fuzzifier only for type 1  
+eta = 7;            %pcm uncertainty parameter for type 1
