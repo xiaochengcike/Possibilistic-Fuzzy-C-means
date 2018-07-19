@@ -2,37 +2,37 @@
 % n = 100;            %number of points
 % d = 2;              %number of dimensions
 % X = rand(n,d);     
-a = 5;              %user defined const a in objective function
+a = 10;              %user defined const a in objective function
 b = 1;             %user defined const b in objective function
 m = 2;              %fuzzifier only for type 1  
-eta = 7;            %pcm uncertainty parameter for type 1
+eta = 3;            %pcm uncertainty parameter for type 1
 epsilon = 10^(-4); %error threshold
 max_iter = 1000;   %max number of iterations before exit
-eta1 = 2;
-eta2 = 3;          %UNCERTAINTY PARAMETERS FOR IT2 PFCM [m1,m2] & [eta1, eta2]
-m1 = 5;
-m2 = 18;
+eta1 = 3;
+eta2 = 5;          %UNCERTAINTY PARAMETERS FOR IT2 PFCM [m1,m2] & [eta1, eta2]
+m1 = 2;
+m2 = 3;
 run_pfcm_type1 = 0;     %Boolean for PFCM Type-1
 run_pfcm_intervaltype2 = 0;     %Boolean for PFCM Type-2
-run_pfcm_generaltype2 = 0;   %Boolean for GT2 PFCM
+run_pfcm_generaltype2 = 1;   %Boolean for GT2 PFCM
 labelled_dataset = 0;     %For datasets such as Iris, Breast Cancer etc
-image_seg = 1;
-unlabelled_dataset = 0;   %For datasets such as Squares3Clust
+image_seg = 0;
+unlabelled_dataset = 1;   %For datasets such as Squares3Clust
 comparison_m = 0;         %Boolean for checking robustess w.r.t m
 comparison_eta = 0;       %Boolean for checking robustness w.r.t eta
 comparison_a = 0;         %Boolean for checking robustness w.r.t a
 comparison_b = 0;         %Boolean for checking robustness w.r.t b  
 random_X = 0;             %For randomly generated X
 normalrandom_X = 0;       %For normal random X
-graph_2d_bool = 0;
+graph_2d_bool = 1;
 graph_2d_conv = 0;
 graph_3d_conv = 0;       %Boolean values for 2D and 3D graphs
 graph_3d_bool = 0;
 purity_checking_bool=1;%gives the purity checking error rate
 f1_score_bool=1;%gives the f1 score
 classification_rate_array=[purity_checking_bool f1_score_bool];%this stores which error rates to print
-mean_m = 12;
-std_dev_m = 4;          %mean and std deviation for fuzzifier m
+mean_m = 3;
+std_dev_m = 0.3;          %mean and std deviation for fuzzifier m
 mean_eta = 3.4;
 std_dev_eta = 0.7;      %mean and std deviation for eta
 alpha = 0.1:0.2:0.9;    %alpha values
@@ -40,8 +40,8 @@ m_array = 1:1:15;        %range of fuzzifier values
 eta_array = 1:1:15;    %range of eta values
 
 interval = 3;
-filename = 's6';
-c = 3;
+filename = 's5';
+c = 2;      %only for unlabelled datasets and image segmentation
 noppr = 1000;
 graph_bool_21 = 0; %used for rgb segmentation
 K_nearest_neighbor = 5;
@@ -60,8 +60,14 @@ if image_seg
     gamma = calculate_gamma(X,V_init,U,c,size(X,1),m);
 %     [V_gt2 U_gt2 T_gt2] = get_final_values_pfcm_generaltype2(X,c,size(X,1),size(X,2),alpha,m_array, mean_m,std_dev_m,eta_array,mean_eta,std_dev_eta,a,b,gamma,epsilon,max_iter,V_init);
 %     [V_it2 U_it2 T_it2] = get_final_values_pfcm_intervaltype2(X,c,size(X,1),size(X,2),m1,m2,eta1,eta2,a,b,gamma,epsilon,max_iter,V_init);    
-    [V_t1 U_t1 T_t1] = get_final_values_pfcm_type1(X,c,size(X,1),size(X,2),m,eta,a,b,gamma,epsilon,max_iter,V_init);    
+    [V_t1 U_t1 T_t1] = get_final_values_pfcm_type1(X,c,size(X,1),size(X,2),m,eta,a,b,gamma,epsilon,max_iter,V_init,graph_2d_conv);    
     img_error= show_image_v3(X,U_t1,filename,interval,1,size(V_t1,1),indices,K_nearest_neighbor,graph_bool_21,noppr);
+end
+
+if unlabelled_dataset
+    X = importdata('t_shape.txt');
+    n = size(X,1);
+    d = size(X,2);
 end
 
 if random_X
@@ -82,7 +88,9 @@ if labelled_dataset
 %     [X,y]=get_data_iris('iris-dataset.txt',',',5);
 %       [X y]=get_text_data('breastCancer.txt',9);%getting data from breast cancer dataset
 %     [X y]=get_text_data('Bridge.txt',3);%getting data for bridge data dataset
-    [X y]=get_wine_data('Wine-Dataset.txt',1);%getting data for bridge data dataset
+%     [X y]=get_wine_data('Wine-Dataset.txt',1);%getting data for bridge data dataset
+%     [X y]=get_text_data('diabetes.txt',9);%getting data for bridge data dataset
+    [X y]=get_text_data('Seeds.txt',8);
     c = size(unique(y),1);
     d = size(X,2);
     n = size(X,1);
@@ -109,7 +117,7 @@ if run_pfcm_generaltype2
     if graph_2d_bool
         figure;
 %        graph_2d(X,V_gt2,U_gt2);
-         graph_2d(X,V_gt2,U_gt2,'g');
+         graph_2d(X,V_gt2,U_gt2,'g',3);
     end
     if graph_3d_bool 
         figure;
@@ -129,7 +137,7 @@ if run_pfcm_intervaltype2
     if graph_2d_bool
         figure;
 %        graph_2d(X,V_it2,U_it2);
-        graph_2d(X,V_it2,U_it2,'g');
+        graph_2d(X,V_it2,U_it2,'g',2);
     end
     if graph_3d_bool 
         figure;
@@ -145,12 +153,12 @@ end
 if run_pfcm_type1
     [V U] = get_final_values_fcm(X,c,n,d,m,epsilon,max_iter);
     gamma = calculate_gamma(X,V,U,c,n,m);
-    [V_t1 U_t1 T_t1] = get_final_values_pfcm_type1(X,c,n,d,m,eta,a,b,gamma,epsilon,max_iter,V);
+    [V_t1 U_t1 T_t1] = get_final_values_pfcm_type1(X,c,n,d,m,eta,a,b,gamma,epsilon,max_iter,V,graph_2d_conv);
    
     if graph_2d_bool
        figure;
 %        graph_2d(X,V_t1,U_t1);
-        graph_2d(X,V_t1,U_t1,'g');
+        graph_2d(X,V_t1,U_t1,'g',1);
     end
     if graph_3d_bool
         figure;
@@ -172,7 +180,7 @@ if comparison_eta && labelled_dataset
     k=1; 
     eta_value = 3:3:30;
     for eta_comp = eta_value
-        [V_t1_comp U_t1_comp T_t1_comp] = get_final_values_pfcm_type1(X,c,n,d,m,eta_comp,a,b,gamma,epsilon,max_iter,V);
+        [V_t1_comp U_t1_comp T_t1_comp] = get_final_values_pfcm_type1(X,c,n,d,m,eta_comp,a,b,gamma,epsilon,max_iter,V,graph_2d_conv);
         [error_t1(k) confusion_t1] = classification_rate(X,V_t1_comp,U_t1_comp,y,classification_rate_array);        
         hold on;
         scatter(eta_comp,error_t1(k),'filled','g');     
@@ -211,7 +219,7 @@ if comparison_m && labelled_dataset
     m_value = 3:3:30;
     figure;
     for m_comp = m_value
-        [V_t1_comp U_t1_comp T_t1_comp] = get_final_values_pfcm_type1(X,c,n,d,m_comp,eta,a,b,gamma,epsilon,max_iter,V);
+        [V_t1_comp U_t1_comp T_t1_comp] = get_final_values_pfcm_type1(X,c,n,d,m_comp,eta,a,b,gamma,epsilon,max_iter,V,graph_2d_conv);
         [error_t1(k) confusion_t1] = classification_rate(X,V_t1_comp,U_t1_comp,y,classification_rate_array);        
         hold on;
         scatter(m_comp,error_t1(k),'filled','g');     
@@ -251,7 +259,7 @@ if comparison_a && labelled_dataset
     a_value = 1:3:30;
     figure;
     for a_comp = a_value
-        [V_t1_comp U_t1_comp T_t1_comp] = get_final_values_pfcm_type1(X,c,n,d,m,eta,a_comp,b,gamma,epsilon,max_iter,V);
+        [V_t1_comp U_t1_comp T_t1_comp] = get_final_values_pfcm_type1(X,c,n,d,m,eta,a_comp,b,gamma,epsilon,max_iter,V,graph_2d_conv);
         [error_t1(k) confusion_t1] = classification_rate(X,V_t1_comp,U_t1_comp,y,classification_rate_array);     
         [V_it2_comp U_it2_comp T_it2_comp] = get_final_values_pfcm_intervaltype2(X,c,n,d,m1,m2,eta1,eta2,a_comp,b,gamma,epsilon,max_iter,V);  
         [error_it2(k) confusion_it2] = classification_rate(X,V_it2_comp,U_it2_comp,y,classification_rate_array);
@@ -286,7 +294,7 @@ if comparison_b && labelled_dataset
     b_value = 1:3:30;
     figure;
     for b_comp = b_value
-        [V_t1_comp U_t1_comp T_t1_comp] = get_final_values_pfcm_type1(X,c,n,d,m,eta,a,b_comp,gamma,epsilon,max_iter,V);
+        [V_t1_comp U_t1_comp T_t1_comp] = get_final_values_pfcm_type1(X,c,n,d,m,eta,a,b_comp,gamma,epsilon,max_iter,V,graph_2d_conv);
         [error_t1(k) confusion_t1] = classification_rate(X,V_t1_comp,U_t1_comp,y,classification_rate_array);     
         [V_it2_comp U_it2_comp T_it2_comp] = get_final_values_pfcm_intervaltype2(X,c,n,d,m1,m2,eta1,eta2,a,b_comp,gamma,epsilon,max_iter,V);  
         [error_it2(k) confusion_it2] = classification_rate(X,V_it2_comp,U_it2_comp,y,classification_rate_array);
@@ -338,7 +346,7 @@ end
 %     hold off
 % end
 
-function p=graph_2d(X,V,U,i_color)%i_color as in input color
+function p=graph_2d(X,V,U,i_color,type)%i_color as in input color
     V=(V-min(X))./(max(X)-min(X))   ; 
     X=(X-min(X))./(max(X)-min(X));
     color=max((max(U)==U).*linspace(0,1,size(U,1))')'   ;
@@ -346,9 +354,17 @@ function p=graph_2d(X,V,U,i_color)%i_color as in input color
     color_2=rand(size(V,1),1);
     hold on
     scatter(X(:,1),X(:,2),200, color,".");
-    p=scatter(V(:,1),V(:,2),200,i_color,"*");
+    p=scatter(V(:,1),V(:,2),200,i_color,"o",'filled');
     xlabel("Feature 1",'FontSize' , 14,'FontWeight' , 'bold');
-    ylabel("Feature 2",'FontSize' , 14,'FontWeight' , 'bold');    
+    ylabel("Feature 2",'FontSize' , 14,'FontWeight' , 'bold'); 
+    set(gca, 'FontName', 'Times New Roman','FontWeight','Bold',  'LineWidth', 1);
+    if type==1
+        saveas(gca,'clusterswithcenters_type1.png');
+    elseif type==2
+        saveas(gca,'clusterswithcenters_intervaltype2.png');
+    else
+        saveas(gca,'clusterswithcenters_generaltype2.png');
+    end
 %     set(gca,'Color','k');
     hold off
 end
@@ -359,6 +375,53 @@ function graph_2d_v2(X,V,U,color)
     color_2=zeros(size(V,1),1);
     hold on
     scatter(V(:,1),V(:,2),200,color,'r*');
+    hold off
+end
+
+function p=graph_2d_y(X,V,U,i_color,y,type)%i_color as in input color
+    V=(V-min(X))./(max(X)-min(X))   ; 
+    X=(X-min(X))./(max(X)-min(X));
+    color=max((max(U)==U).*linspace(0,1,size(U,1))')'   
+%     color=[color color color]-[0 rand() rand()];
+    colors=[0 0 1; 1 0 1;0 1 1;0 0 0;];
+    y=(y-min(y))/(max(y)-min(y));
+    unique_y=unique(y);
+    all_indices=cell(size(unique_y));
+    max_classifications=0;
+    for unique_y_indices=1:size(unique_y,1)
+        all_indices(unique_y_indices)={find(color==unique_y(unique_y_indices))};
+    end
+    for permute_y=perms(unique_y)';
+        for unique_y_index=1:size(permute_y,1)
+            color(cell2mat(all_indices(unique_y_index)))=permute_y(unique_y_index);
+        end
+        correct_classifications=sum(color==y);
+        if max_classifications<correct_classifications
+            max_classifications=correct_classifications;
+            temp_color=color;
+            correct_color_code=permute_y;
+        end
+    end
+    color=[temp_color temp_color temp_color];
+    for unique_y_indices=1:size(unique_y,1)
+        replace_indices=find(temp_color==unique_y(unique_y_indices));
+        color(replace_indices,1)=colors(unique_y_indices,1);
+        color(replace_indices,2)=colors(unique_y_indices,2);
+        color(replace_indices,3)=colors(unique_y_indices,3);
+    end
+   
+    hold on
+    scatter(X(:,1),X(:,2),200, color,".");
+    p=scatter(V(:,1),V(:,2),200,i_color,"o",'filled');
+    xlabel("Feature 1",'FontSize' , 14,'FontWeight' , 'bold');
+    ylabel("Feature 2",'FontSize' , 14,'FontWeight' , 'bold');    
+    set(gca, 'FontName', 'Times New Roman','FontSize',14,'FontWeight','Bold',  'LineWidth', 1);
+    if type==1
+        saveas(gca,'clusterswithcenters_type1.png');
+    else
+        saveas(gca,'clusterswithcenters_type2.png');
+    end
+%     set(gca,'Color','k');
     hold off
 end
 
@@ -379,6 +442,7 @@ function p=graph_3d(X,V,U,i_color,point_size,point_shape,filled_color)%i_color a
      xlabel("Feature 1",'FontSize' , 16,'FontWeight' , 'bold');
      ylabel("Feature 2",'FontSize' , 16,'FontWeight' , 'bold');
      zlabel("Feature 3",'FontSize' , 16,'FontWeight' , 'bold');
+      set(gca, 'FontName', 'Times New Roman','FontWeight','Bold',  'LineWidth', 1);
 end
 
 function [V U] = get_final_values_fcm(X,c,n,d,m,epsilon,max_iter)
@@ -421,9 +485,9 @@ function gamma = calculate_gamma(X,V,U,c,n,m)      %function to calculate cx1 ga
     gamma = gamma./sum(new_U,2);
 end
 
-function [V U T] = get_final_values_pfcm_type1(X,c,n,d,m,eta,a,b,gamma,epsilon,max_iter,V_init)
-%     V_old = V_init;
-    V_old = rand(c,d);
+function [V U T] = get_final_values_pfcm_type1(X,c,n,d,m,eta,a,b,gamma,epsilon,max_iter,V_init,graph_conv)
+    V_old = V_init;
+%     V_old = rand(c,d);
     V_saved_type1 = V_old;
     V = zeros(c,d);
     U = zeros(c,d);
@@ -438,6 +502,10 @@ function [V U T] = get_final_values_pfcm_type1(X,c,n,d,m,eta,a,b,gamma,epsilon,m
             break
         end
         V_old = V;
+        if graph_conv
+            hold on
+            graph_2d(X,V_old,U,'g',1);
+        end
     end
 end
 
