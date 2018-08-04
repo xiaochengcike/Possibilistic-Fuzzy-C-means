@@ -1,0 +1,19 @@
+The results for Interval Type-2 are as follows: purity check error rate=47.1963
+
+confusion_matrix =
+
+    35     0     0     0     0     0
+     0    36     0     0     0     0
+    70    76    17    13     9    29
+     0     5    17    13     3     0
+    70    76    17    13     9    29
+     0     0     0     0     6    29
+
+
+a = 30;              %user defined const a in objective function
+b = 1;             %user defined const b in objective function
+eta1 = 2;
+eta2 = 3;          %UNCERTAINTY PARAMETERS FOR IT2 PFCM [m1,m2] & [eta1, eta2]
+m1 = 2;
+m2 = 2.3;
+

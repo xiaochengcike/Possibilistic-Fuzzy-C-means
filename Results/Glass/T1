@@ -1,0 +1,13 @@
+The results for Type-1 are as follows: purity check error rate=57.0093
+
+confusion_matrix =
+
+    36     0     0     0     0     0
+     0    37     0     0     0     0
+    70    76    17    13     9    29
+     0     3    17    13     3     0
+     0     0     0     0     6    29
+    70    76    17    13     9    29
+
+
+Same a,b as IT2
