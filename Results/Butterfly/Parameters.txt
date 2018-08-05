@@ -1,0 +1,16 @@
+Parameters used:
+
+a = 1;              %user defined const a in objective function
+b = 1;             %user defined const b in objective function
+m = 3.1;              %fuzzifier only for type 1  
+eta = 3;            %pcm uncertainty parameter for type 1
+
+eta1 = 3;
+eta2 = 5;          %UNCERTAINTY PARAMETERS FOR IT2 PFCM [m1,m2] & [eta1, eta2]
+m1 = 2;
+m2 = 3;
+
+mean_m = 3;
+std_dev_m = 0.3;          %mean and std deviation for fuzzifier m
+mean_eta = 3.4;
+std_dev_eta = 0.7;      %mean and std deviation for eta

@@ -4,7 +4,7 @@
 % X = rand(n,d);     
 a = 1;              %user defined const a in objective function
 b = 1;             %user defined const b in objective function
-m = 3.1;              %fuzzifier only for type 1  
+m = 2;              %fuzzifier only for type 1  
 eta = 3;            %pcm uncertainty parameter for type 1
 epsilon = 10^(-4); %error threshold
 max_iter = 1000;   %max number of iterations before exit
@@ -387,7 +387,7 @@ function graph_2d_v2(X,V,U,color)
     hold off
 end
 
-function p=	graph_2d_y(X,V,U,i_color,y,type)%i_color as in input color
+function p=	(X,V,U,i_color,y,type)%i_color as in input color
     V=(V-min(X))./(max(X)-min(X))   ; 
     X=(X-min(X))./(max(X)-min(X));
     color=max((max(U)==U).*linspace(0,1,size(U,1))')'   
@@ -421,8 +421,7 @@ function p=	graph_2d_y(X,V,U,i_color,y,type)%i_color as in input color
    
     hold on
     xl = [0 0 1 1];
-    yl = [0 1 1 0];
-    plot(xl,yl,'k');
+    yl = [0 1 1 ]
     scatter(X(:,1),X(:,2),200, color,".");
     p=scatter(V(:,1),V(:,2),200,i_color,"o",'filled');
     xlabel("Feature 1",'FontSize' , 14);
